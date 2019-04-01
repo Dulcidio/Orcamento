@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fp="http://xmlns.jcp.org/jsf/core"
+       >
+     <h:head>
+      <h:outputStylesheet library="css" name="style.css"/>
+     <title>Lista Completa de Funcionários</title> 
+      <script>
+      function somenteNumeros(num) {
+        var er = /[^0-9.]/;
+        er.lastIndex = 0;
+        var campo = num;
+        if (er.test(campo.value)) {
+          campo.value = "";
+        }
+      }
+     </script>
+     
+      </h:head>  
+      
+      
+    <h:body>
+     
+    
+    
+     <p:growl id="mensagem"/>
+     <p:layout fullPage="true">
+
+    <p:layoutUnit position="north" size="50" header="Lista de Funcionários" resizable="true" closable="true" collapsible="true">
+       
+    </p:layoutUnit>
+
+     
+
+    <p:layoutUnit position="west" size="200" header="Menu Inicial" resizable="true" closable="true" collapsible="true">
+        <h:form>
+
+                <p:panelMenu
+                     >
+                    <p:submenu label="Opções" style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;">
+                        <p:menuitem value="Página Principal" 
+                        icon="fa fa-home"
+                         action="#{usuarioBean.inicialPage}"
+                          style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;"/>
+                         
+                    </p:submenu>
+
+                    <p:submenu label="Funcionários" style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;">
+                         <p:menuitem 
+                         rendered="#{autenticacaoBean.userLogin.perfil=='ADMINISTRADOR'||autenticacaoBean.userLogin.perfil=='PADRAO'}"
+                         value="Novo Funcionário" oncomplete="PF('cadastroFuncDL').show()"
+                         icon="fa fa-plus-square-o"
+                         style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;"/>
+                         
+                          <p:menuitem value="Imprimir Lista" 
+                          icon="fa fa-print"
+                          action="#{funcionarioBean.imprimir}"
+                          style="font-size:14px ;
+                          font-weight:bold ; font-style: italic;"
+                          target="_blank"
+                          ajax="false"/>
+                    </p:submenu>
+                  </p:panelMenu>
+
+            </h:form>
+    </p:layoutUnit>
+
+     
+
+    <p:layoutUnit position="center">
+        <h:form>
+    <p:dataTable  id="tabFuncionarios" var="funcionarios" value="#{funcionarioBean.funcionarios}"  rows="14"
+                 paginator="true"
+                 editable="true" 
+                 rowsPerPageTemplate="5,10,15"
+                 rendered="true"
+                 emptyMessage="nenhum funcionario registrado">
+        <f:facet name="header">
+        
+        </f:facet>         
+        <p:column width="4%">
+         <p:rowToggler />
+         </p:column>
+       <p:rowExpansion id="detalhesFuncionarios" reflow="true" >
+            <p:panelGrid id="gridDetalhes"  styleClass="semBorda" columns="1"  >
+       <f:facet name="header">
+        <p:row>
+            <p:column colspan="7">Detalhes Funcionários</p:column>
+        </p:row>
+       </f:facet>  
+         <p:tabView reflow="true" style="color: #ff6600;" >
+          <p:tab title="Dados de Contato"  >
+            <h:panelGrid columns="1" cellpadding="1">
+                <f:facet  name="header">
+                  <p:row >
+                     <p:column colspan="7" >Informações de contato com o funcionário</p:column>
+                    </p:row>
+                 </f:facet> 
+                     <h:outputText value="Celular: #{funcionarios.celular}" style="font-weight:bold"/>
+                     <h:outputText value="Fone: #{funcionarios.fone}" style="font-weight:bold"/>
+                     <h:outputText value="WhatsApp: #{funcionarios.whatsapp}" style="font-weight:bold"/>
+                     <h:outputText value="e-mail: #{funcionarios.email}" style="font-weight:bold"/>
+                  </h:panelGrid>
+               </p:tab> 
+            <p:tab title="Dados de Endereço"  >
+            <h:panelGrid columns="1" cellpadding="1">
+                <f:facet name="header">
+                  <p:row>
+                     <p:column colspan="7">Informações de endereço do funcionário</p:column>
+                    </p:row>
+                 </f:facet> 
+                     <h:outputText value="Rua: #{funcionarios.rua}" style="font-weight:bold"/>
+                     <h:outputText value="Nro: #{funcionarios.nro}" style="font-weight:bold"/>
+                     <h:outputText value="Bairro: #{funcionarios.bairro}" style="font-weight:bold"/>
+                     <h:outputText value="Cidade: #{funcionarios.cidade}" style="font-weight:bold"/>
+                     <h:outputText value="Cep: #{funcionarios.cep}" style="font-weight:bold"/>
+                     <h:outputText value="UF: #{funcionarios.estado.nome}" style="font-weight:bold"/>
+                   </h:panelGrid>
+               </p:tab> 
+              <p:tab title="Dados Pessoais"  >
+                <h:panelGrid columns="1" cellpadding="1">
+                <f:facet name="header">
+                  <p:row>
+                     <p:column colspan="7">Informações pessoais do funcionário</p:column>
+                    </p:row>
+                 </f:facet> 
+                     <h:outputText value="Estado Civil: #{funcionarios.estadocivil.descricao}" style="font-weight:bold"/>
+                     <h:outputText value="Sexo: #{funcionarios.sexo.descricao}" style="font-weight:bold"/>
+                     <h:outputText value="Natural: #{funcionarios.localnasimento}" style="font-weight:bold"/>
+                     <p:column >
+                     <h:outputText value="Aniversário: " style="font-weight:bold"/>
+                     <h:outputText value="#{funcionarios.aniversario}" style="font-weight:bold">
+                     <f:convertDateTime locale="pt_BR"/>
+                     </h:outputText>
+                     </p:column>
+                    </h:panelGrid>
+               </p:tab>
+               <p:tab title="Dados de Contrato"  >
+                <h:panelGrid columns="1" cellpadding="1">
+                <f:facet  name="header">
+                  <p:row >
+                     <p:column colspan="7">Informações contrato funcionário</p:column>
+                    </p:row>
+                 </f:facet> 
+                     <h:outputText value="Matricula: #{funcionarios.matricula}" style="font-weight:bold"/>
+                     <h:outputText value="Situação: #{funcionarios.status}" style="font-weight:bold"/>
+                      <p:column >
+                     <h:outputText value="Contratação: " style="font-weight:bold"/>
+                     <h:outputText value="#{funcionarios.admissao}" style="font-weight:bold">
+                     <f:convertDateTime locale="pt_BR"/>
+                     </h:outputText>
+                     </p:column>
+                     <h:outputText value="OBS: #{funcionarios.observacao}" style="font-weight:bold"/>
+                    </h:panelGrid>
+               </p:tab>
+            </p:tabView>  
+         </p:panelGrid>
+       </p:rowExpansion> 
+         
+                  
+        <p:column headerText="Id" width="10%">
+            <h:outputText value="#{funcionarios.codigo}" />
+        </p:column>
+ 
+        <p:column headerText="Nome">
+            <h:outputText value="#{funcionarios.nome}" />
+        </p:column>
+ 
+        <p:column headerText="CPF">
+            <h:outputText value="#{funcionarios.cpf}" />
+        </p:column>
+  
+         <p:column headerText="RG">
+            <h:outputText value="#{funcionarios.rg}" />
+        </p:column>
+        
+        <p:column headerText="Ação" width="15%">
+          <p:commandButton icon="fa fa-fw fa-edit" title="editar" 
+           actionListener="#{funcionarioBean.editar}"
+           oncomplete="PF('cadastroFuncDL').show()"
+           update="formFuncionarioDL"
+           style="color:#ffffff; background:#00e600"  
+           rendered="#{autenticacaoBean.userLogin.perfil=='ADMINISTRADOR'||autenticacaoBean.userLogin.perfil=='PADRAO'}">
+            <f:attribute  name="funcionarioSelecionado" value="#{funcionarios}"/>
+             <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+           </p:commandButton>
+           
+        </p:column>
+       <f:facet name="paginatorTopLeft">
+            <p:commandButton type="button" icon="pi pi-refresh" />
+        </f:facet>
+ 
+        <f:facet name="paginatorBottomRight">
+            <p:commandButton type="button" icon="pi pi-cloud-upload" />
+        </f:facet>
+ 
+    </p:dataTable>
+    </h:form>
+    </p:layoutUnit>
+ </p:layout>
+ 
+   <p:dialog header="Cadastro de funcionarios" closable="true" draggable="false"
+      modal="true" visible="false" widgetVar="cadastroFuncDL">
+       <h:form id="formFuncionarioDL">
+          <h:panelGrid columns="9" cellpadding="2">
+          <p:outputLabel for="nome" value="Nome: " />
+          <p:spacer width="25" height="25" />
+            <p:inputText id="nome" value="#{funcionarioBean.funcionario.nome}" required="true"
+            size="30" placeholder="Informe o nome" requiredMessage="O Nome é obrigatório"/> 
+          <p:outputLabel for="cpf" value="CPF: " />
+            <p:inputMask mask="999-999-999-99"  id="cpf" value="#{funcionarioBean.funcionario.cpf}" required="true"
+            size="20" placeholder="Informe o cpf" requiredMessage="O CPF é obrigatório"/> 
+            <p:outputLabel for="RG" value="RG: " />
+            <p:inputText id="RG" value="#{funcionarioBean.funcionario.rg}" required="true"
+            size="20" placeholder="Informe o RG" requiredMessage="O RG é obrigatório"/> 
+            <p:outputLabel for="emissor" value="Emissor: " />
+            <p:inputText id="emissor" value="#{funcionarioBean.funcionario.emissor}"  
+            size="10" placeholder="emissor"  />
+         </h:panelGrid>
+         <br/>
+         <h:panelGrid columns="10" cellpadding="2">
+           <h:form>
+             <p:outputLabel for="celular" value="Celular: " />
+             <p:spacer width="22" height="22" />
+             <p:inputMask mask="(99)99?99-9999"  id="celular" value="#{funcionarioBean.funcionario.celular}" required="true"
+            size="15"   requiredMessage="O celuar é obrigatório"/>
+            <p:spacer width="10" height="10" />
+            <p:outputLabel for="fone" value="Fone: " />
+            <p:inputMask mask="(99)99?99-9999"  id="fone" value="#{funcionarioBean.funcionario.fone}" 
+            size="15"    />
+            </h:form>
+            <p:spacer width="10" height="10" />
+            <p:outputLabel for="whats" value="WhatsApp: " />
+            <p:inputText  id="whats" value="#{funcionarioBean.funcionario.whatsapp}" 
+            size="15"    />
+            <p:spacer width="10" height="10" />
+            <p:outputLabel for="mail" value="e-mail: " />
+            <p:inputText  id="mail" value="#{funcionarioBean.funcionario.email}" 
+            size="20"    />
+         </h:panelGrid>
+         <h:panelGrid columns="10" cellpadding="2">
+           <p:outputLabel  value="Rua: " />
+           <p:spacer width="62" height="62" />
+           <p:inputText value="#{funcionarioBean.funcionario.rua}" size="35" />
+           <p:outputLabel  value="Nro: " />
+           <p:inputText value="#{funcionarioBean.funcionario.nro}" size="10" onkeyup="somenteNumeros(this);"/>
+           <p:outputLabel  value="Bairro: " />
+           <p:inputText value="#{funcionarioBean.funcionario.bairro}" size="35" />
+           </h:panelGrid> 
+           <h:panelGrid columns="9" cellpadding="2">   
+           <p:outputLabel  value="Cidade: " />
+           <p:spacer width="37" height="37" /> 
+           <p:inputText value="#{funcionarioBean.funcionario.cidade}" size="35" /> 
+           <p:outputLabel  value="Cep: " />
+           <p:inputMask mask="99-999-999" value="#{funcionarioBean.funcionario.cep}" size="20" />
+           <p:outputLabel  value="UF: " />
+           <p:selectOneMenu id="uf" value="#{funcionarioBean.funcionario.estado}"    style="width:125px">
+			  <f:selectItem noSelectionOption="true" itemValue="" itemLabel="Estado"/>
+			  <f:selectItems value="#{funcionarioBean.estado}" 
+			  var="estado"
+			  itemValue="#{estado}"
+			  itemLabel="#{estado.uf}"
+			  />
+              </p:selectOneMenu>
+           </h:panelGrid> 
+           <br/>
+           <h:panelGrid columns="9" cellpadding="2">
+             <p:outputLabel  value="Estado Civil: " />
+              <p:selectOneMenu id="civil" value="#{funcionarioBean.funcionario.estadocivil}" style="width:25px">
+			  <f:selectItem noSelectionOption="true" itemValue="" itemLabel="civil"/>
+			  <f:selectItems value="#{funcionarioBean.estatoCivil}" 
+			  var="civil"
+			  itemValue="#{civil}"
+			  itemLabel="#{civil.descricao}"
+			  />
+			  </p:selectOneMenu>
+             <p:outputLabel  value="Naturalidade: " />
+             <p:inputText value="#{funcionarioBean.funcionario.localnasimento}" size="30" />
+             <p:outputLabel  value="Nascimento: " />
+             <p:calendar id="button" value="#{funcionarioBean.funcionario.aniversario}" showOn="button" />
+              <p:outputLabel  value="Sexo: " />
+              <p:selectOneMenu id="sexo" value="#{funcionarioBean.funcionario.sexo}" style="width:25px">
+			  <f:selectItem noSelectionOption="true" itemValue="" itemLabel="Sexo"/>
+			  <f:selectItems value="#{funcionarioBean.sexo}" 
+			  var="sexo"
+			  itemValue="#{sexo}"
+			  itemLabel="#{sexo.descricao}"
+			  />
+			  </p:selectOneMenu>
+            </h:panelGrid> 
+            <br/>
+            <h:panelGrid columns="9" cellpadding="2">
+              <p:outputLabel for="Matricula" value="Matricula: " />
+              <p:spacer width="15" height="15" /> 
+               <p:inputText id="Matricula" value="#{funcionarioBean.funcionario.matricula}" 
+                 size="10" placeholder="Matricula"  />
+              <p:outputLabel  value="Situação: " />
+              <p:inputText value="#{funcionarioBean.funcionario.status}" size="20" />
+              <p:outputLabel  value="Contratação: " />
+             <p:calendar id="buttonAdmissao" value="#{funcionarioBean.funcionario.admissao}" showOn="button" />
+             <p:outputLabel  value="Obs: " />
+              <p:inputText value="#{funcionarioBean.funcionario.observacao}" size="35" />
+             </h:panelGrid> 
+             <br/>
+         <h:panelGrid columns="2" cellpadding="2">							
+        <p:commandButton value="Salvar"  
+         actionListener="#{funcionarioBean.salvar}"
+         update="mensagem :tabFuncionarios"  
+        style="margin-right:5px;"
+        ajax="false"
+          />
+        
+	    <p:commandButton value="Sair" 
+	    style="margin-right:5px;"
+         onclick="PF('cadastroFuncDL').hide()">	
+         <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>																	
+        </p:commandButton>
+        </h:panelGrid>
+      
+     </h:form>
+     </p:dialog>
+ </h:body> 
+</html>

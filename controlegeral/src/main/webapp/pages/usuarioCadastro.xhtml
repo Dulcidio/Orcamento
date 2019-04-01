@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fp="http://xmlns.jcp.org/jsf/core"
+       >
+     <h:head>
+     <style type="text/css">
+    .value {
+        font-weight: bold;
+    }
+     </style>
+      <script type="text/javascript">
+       var windowObjectReference;
+       var strWindowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+
+       function listarUsuarios() {
+       windowObjectReference = window.open("listaUsuarios.xhtml", "Lista Usuarios", strWindowFeatures);
+       }
+       </script>
+      <h:outputStylesheet library="css" name="style.css"/>
+     <title>Cadastrar Usuário</title> 
+     <p:growl id="mensagem"/>
+     
+       
+     </h:head>  
+     <h:body>
+     <p:layout fullPage="true">
+
+    <p:layoutUnit position="north" size="170" header="Formulário de cadastro de usuário" resizable="true" closable="true" collapsible="true">
+        <p style="background-color:rgb(255, 255, 102);"><b>*Orientações para o cadastro de usuario<br/>
+           *A senha deve ter no minimo 4 digitos (Alfanuméricos) e no máximo 8<br/>
+           *Deve selecionar o funcionário a qual o login vai ser vinculado<br/>
+           *Fique atento ao nivel de permissão selecionado ao novo usuário</b></p>
+          
+    </p:layoutUnit>
+
+    <p:layoutUnit position="south" size="100" header="Bottom" resizable="true" closable="true" collapsible="true">
+        <h:outputText value="South unit content." />
+    </p:layoutUnit>
+    
+    <p:layoutUnit id="layoutCadUser" position="center">
+         <h:form id="cadUsuarioForm">
+         <f:facet name="header">
+           <p style="background-color:rgb(255, 255, 102);"><b>*Orientações para o cadastro de usuario<br/>
+           *A senha deve ter no minimo 4 digitos (Alfanuméricos) e no máximo 8<br/>
+           *Deve selecionar o funcionário a qual o login vai ser vinculado<br/>
+           *Fique atento ao nivel de permissão selecionado ao novo usuário</b></p>
+         </f:facet>
+          
+          <p></p>
+             <h:panelGrid   columns="11" >
+              <p:spacer width="20" height="20" />
+              <p:outputLabel for="login" value="Login: "  />
+              <p:spacer width="30" height="30" />
+			  <p:inputText id="login" size="30" placeholder="informe o login" value="#{usuarioBean.usuario.username}"
+			  required="true" requiredMessage="O campo 'Login' é obrigatório"/>
+			  </h:panelGrid> 
+			  <h:panelGrid   columns="5" >
+			  <p:spacer width="20" height="20" />
+			  <p:outputLabel for="senha" value="Senha: "  />
+			  <p:spacer width="20" height="20" />
+			  <p:password id="senha"  size="20" value="#{usuarioBean.usuario.senhaSemCriptografia}"
+			  maxlength="8" match="senha2"
+			  required="true" requiredMessage="O campo 'Senha' é obrigatório"
+			  feedback="true" promptLabel="Força da Senha" weakLabel="Fraca"
+                    goodLabel="Média" strongLabel="Forte"
+                    validatorMessage="As senhas não conferem!"
+                    >
+			  
+			  </p:password>
+			  <br></br><br/><br />
+			  <p:spacer width="20" height="20" />
+			  <p:outputLabel for="senha2"  value="Confir: "  />
+			  <p:spacer width="20" height="20" />
+			  <p:password id="senha2"  size="20"
+			  maxlength="8" 
+			  required="true" requiredMessage="O campo 'Confirmar' é obrigatório"
+			  validatorMessage="Senha deve ter minimo 4 digitos!">
+			  <f:validateLength minimum="4" ></f:validateLength>
+			  </p:password>
+			   
+			  </h:panelGrid> 
+			  <h:panelGrid   columns="11" > 
+			  <p:spacer width="20" height="20" />
+			  <p:outputLabel value="Perfil: "  />
+			  <p:spacer width="56" height="56" />
+			  <p:selectOneMenu id="perfil" value="#{usuarioBean.usuario.perfil}"    style="width:125px" 
+			  required="true" requiredMessage="O campo 'perfil' é obrigatório">
+			  <f:selectItem noSelectionOption="true" itemValue="" itemLabel="Tipo do Perfil"/>
+			  <f:selectItems value="#{usuarioBean.perfil}" 
+			  var="perfil"
+			  itemValue="#{perfil}"
+			  itemLabel="#{perfil.perfil}"
+			  />
+              </p:selectOneMenu>
+              </h:panelGrid>
+              <h:panelGrid   columns="11" >
+              <p:spacer width="20" height="20" />
+              <p:outputLabel value="Status: "  />
+              <p:spacer width="43" height="43" />
+              
+              <p:selectOneMenu id="statu" value="#{usuarioBean.usuario.estatus}"  style="width:125px" 
+              required="true" requiredMessage="O campo 'Estatus' é obrigatório">
+			  <f:selectItem noSelectionOption="true" itemValue="" itemLabel="Selecione um Estatus"/>
+              <f:selectItems value="#{usuarioBean.estatus}"
+              var="statu"
+              itemValue="#{statu}"
+              itemLabel="#{statu.descricao}"/>
+              </p:selectOneMenu>
+              </h:panelGrid>
+              <h:panelGrid   columns="11" > 
+              <p:spacer width="20" height="20" />
+              <p:outputLabel value="Funcionário: "  />
+			  <p:selectOneMenu value="#{usuarioBean.usuario.funcionario}" style="width:125px"
+								converter="omnifaces.SelectItemsConverter"
+								required="true" requiredMessage="O campo 'Funcionário' é obrigatório" >
+								<f:selectItem noSelectionOption="true" itemValue="" itemLabel="Selecione um Funcionário"/>
+								<f:selectItems value="#{funcionarioBean.funcionarios}" var="Funcionario" 
+								itemValue="#{Funcionario}" itemLabel="#{Funcionario.nome}"
+								/>
+              </p:selectOneMenu>
+              
+			  <p:spacer width="52" height="52" />
+			  </h:panelGrid>
+			  <h:panelGrid   columns="12" > 
+			   <h:form>
+			   <p:spacer width="300" height="20" />
+               <p:commandButton value="Salvar" id="salvar" style="margin-right:20px;"  
+               actionListener="#{usuarioBean.salvar}"
+               update="mensagem"/>
+              <p:commandButton value="Sair" id="sair" style="margin-right:20px;" 
+              action="listarUsuarios();"
+               />
+               </h:form>
+              </h:panelGrid>
+           
+            </h:form>
+    </p:layoutUnit>
+
+</p:layout>
+ </h:body> 
+</html>

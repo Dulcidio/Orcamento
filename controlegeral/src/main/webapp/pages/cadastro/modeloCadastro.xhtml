@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fp="http://xmlns.jcp.org/jsf/core"
+       >
+     <h:head>
+      <h:outputStylesheet library="css" name="style.css"/>
+     <title>Cadastro de funcionários</title> 
+     
+     
+       
+     </h:head>  
+     <h:body>
+     <p:layout fullPage="true">
+
+    <p:layoutUnit position="north" size="100" header="Inicio" resizable="true" closable="true" collapsible="true">
+        <h:outputText value="North unit content." />
+    </p:layoutUnit>
+
+    <p:layoutUnit position="south" size="100" header="Bottom" resizable="true" closable="true" collapsible="true">
+        <h:outputText value="South unit content." />
+    </p:layoutUnit>
+
+    <p:layoutUnit position="west" size="200" header="Left" resizable="true" closable="true" collapsible="true">
+        <h:outputText value="West unit content." />
+    </p:layoutUnit>
+
+     
+
+    <p:layoutUnit position="center">
+        <h:form>
+       
+          <b>Cadastro de funcionários</b>
+          <p></p>
+           <h:panelGrid   columns="1" >
+            <h:panelGrid header="Cadastrar funcionários" columns="8" >
+              <p:outputLabel value="Nome: "  />
+			  <p:inputText size="30" placeholder="informe o nome"/>
+			  <p:outputLabel value="cpf: "  />
+			  <p:inputText size="20"/>
+			  <p:outputLabel value="rg: "  />
+			  <p:inputText size="20"/>
+			  <p:outputLabel value="Matricula: "  />
+			  <p:inputText size="20" placeholder="matricula"/>
+            </h:panelGrid>
+            <br/>
+            <h:panelGrid   columns="11" >
+              <p:outputLabel value="Admissão: "  />
+              <p:spacer width="12" height="12" />
+			  <p:calendar id="popup"  size="20"/>
+			  <p:spacer width="20" height="20" />
+			  <p:outputLabel value="emissor: "  />
+			  <p:inputText size="10"/>
+			  <p:spacer width="24" height="24" />
+			  <p:outputLabel value="status: "  />
+			  <p:selectOneMenu id="situacao"    style="width:125px">
+			  <f:selectItem itemLabel="Ativo" itemValue="Ativo" />
+              <f:selectItem itemLabel="Inátivo" itemValue="Inátivo" />
+              </p:selectOneMenu>
+			  <p:outputLabel value="Local Nasc: "  />
+			  <p:inputText size="29" placeholder="Informe a cidade de nascimento"/>
+            </h:panelGrid>
+            <br/>
+             <h:panelGrid   columns="11" >
+             <p:outputLabel value="Nascimento: "  />
+             <p:calendar id="nasc"  size="20"/>
+             <p:spacer width="15" height="15" />
+             <p:outputLabel value="Est Civil: "  />
+             <p:selectOneMenu id="civil"   style="width:125px">
+			  <f:selectItem itemLabel="Casado" itemValue="Casado" />
+              <f:selectItem itemLabel="Solteiro" itemValue="Solteiro" />
+              </p:selectOneMenu>
+              <p:spacer width="15" height="15" />
+              <p:outputLabel value="Sexo: "  />
+             <p:selectOneMenu id="sexo"   style="width:125px">
+			  <f:selectItem itemLabel="Masculino" itemValue="Casado" />
+              <f:selectItem itemLabel="Feminino" itemValue="Solteiro" />
+              </p:selectOneMenu>
+              
+              
+             </h:panelGrid>
+             <br/>
+             <h:panelGrid   columns="11" >
+             <p:outputLabel value="Largadouro: "  />
+			  <p:inputText size="25" placeholder="Informe o largadouro"/>
+			   <p:spacer width="10" height="10" />
+			  <p:outputLabel value="Nro: "  />
+			  <p:inputText size="6" placeholder="nro"/>
+			  <p:outputLabel value="Cidade: "  />
+			  <p:inputText size="25" placeholder="Informe a cidade"/>
+			  <p:outputLabel value="Bairro: "  />
+			  <p:inputText size="26" placeholder="Informe o bairro"/>
+             </h:panelGrid>
+             <br/>
+             <h:panelGrid   columns="11" >
+              <p:outputLabel value="Estado: "  />
+              <p:spacer width="35" height="35" />
+             <p:selectOneMenu id="estado"   style="width:125px">
+			  <f:selectItem itemLabel="Estado" itemValue="Casado" />
+              <f:selectItem itemLabel="Estado" itemValue="Solteiro" />
+              </p:selectOneMenu>
+              <p:spacer width="30" height="30" />
+              <p:outputLabel value="Cep: "  />
+			  <p:inputText size="20" placeholder="Cep"/>
+             </h:panelGrid>
+             <br/>
+             <h:panelGrid   columns="11" >
+             <p:outputLabel value="Telefone: "  />
+             <p:spacer width="20" height="20" />
+             <p:inputMask id="fone"   mask="(99)9999-9999" size="15"/>
+             <p:spacer width="20" height="20" />
+             <p:outputLabel value="Celular: "  />
+             <p:inputMask id="celular"   mask="(99)9999-9999" size="15"/>
+             <p:outputLabel value="WhatsApp: "  />
+             <p:inputMask id="whast" size="15"   />
+             <p:spacer width="30" height="30" />
+             <p:outputLabel value="e-mail: "  />
+			  <p:inputText size="28" placeholder="e-mail"/>
+             </h:panelGrid>
+              
+             <h:panelGrid   columns="11" >
+             <h:form>
+             <p:outputLabel value="Obs: "  />
+             <p:spacer width="59" height="9" />
+             <p:inputTextarea rows="2" cols="45" queryDelay="750" minQueryLength="4" />
+              
+              <p:spacer width="500" height="10" />
+              <p:commandButton value="Salvar" id="salvar" style="margin-right:20px;" ajax="false" />
+              <p:commandButton value="Sair" id="sair" style="margin-right:20px;" ajax="false"
+                />
+             </h:form>
+             </h:panelGrid>
+             </h:panelGrid>
+       </h:form>
+    </p:layoutUnit>
+
+</p:layout>
+ </h:body> 
+</html>

@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fp="http://xmlns.jcp.org/jsf/core"
+       >
+       
+     <h:head>
+      <h:outputStylesheet library="css" name="style.css"/>
+      
+      <script>
+      function somenteNumeros(num) {
+        var er = /[^0-9.]/;
+        er.lastIndex = 0;
+        var campo = num;
+        if (er.test(campo.value)) {
+          campo.value = "";
+        }
+      }
+     </script>
+      
+     <title>Lista Completa de Clientes</title> 
+      </h:head>  
+      
+      
+    <h:body>
+     
+    
+    
+     <p:growl id="mensagem"/>
+     <p:layout fullPage="true">
+
+    <p:layoutUnit position="north" size="50" header="Lista de Clientes" resizable="true" closable="true" collapsible="true">
+       
+    </p:layoutUnit>
+
+     
+
+    <p:layoutUnit position="west" size="200" header="Menu Inicial" resizable="true" closable="true" collapsible="true">
+        <h:form>
+
+                <p:panelMenu
+                     >
+                    <p:submenu label="Opções" style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;">
+                        <p:menuitem value="Página Principal" 
+                         action="#{usuarioBean.inicialPage}" 
+                         icon="fa fa-home"
+                        style="font-size:14px ;
+                        font-weight:bold ; font-style: italic;"
+                          />
+                         
+                    </p:submenu>
+                     <p:submenu label="Clientes"  style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;">
+                        <p:menuitem value="Novo" oncomplete="PF('cadastroCliDL').show()"
+                        rendered="#{autenticacaoBean.userLogin.perfil=='ADMINISTRADOR'||autenticacaoBean.userLogin.perfil=='PADRAO'}"
+                        icon="fa fa-plus-square-o"
+                        style="font-size:14px ;
+                        font-weight:bold ; font-style: italic;"/>
+                         <p:menuitem icon="fa fa-print" value="Relatório de clientes"
+                         action="#{clienteBean.imprimir}"
+                         target="_blank"
+                         style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;"
+                         ajax="false"/>
+                    </p:submenu>
+                   
+                    
+                   
+                  </p:panelMenu>
+             </h:form>
+    </p:layoutUnit>
+ 
+
+    <p:layoutUnit position="center">
+        <h:form>
+    <p:dataTable  id="tabClientes" var="clientes" value="#{clienteBean.clientes}"  rows="14"
+                 paginator="true"
+                 editable="true" 
+                 rowsPerPageTemplate="5,10,15"
+                 rendered="true"
+                 emptyMessage="nenhum cliente cadastrado">
+        <f:facet name="header">
+        
+        </f:facet>         
+        <p:column width="4%">
+         <p:rowToggler />
+         </p:column>
+       <p:rowExpansion id="detalhesClientes" reflow="true" >
+            <p:panelGrid id="gridDetalhes"  styleClass="semBorda" columns="1"  >
+       <f:facet name="header">
+        <p:row>
+            <p:column colspan="7">Detalhes Clientes</p:column>
+        </p:row>
+       </f:facet>  
+         <p:tabView reflow="true" style="color: #ff6600;" >
+          <p:tab title="Dados de Contato"  >
+            <h:panelGrid columns="1" cellpadding="1">
+                <f:facet  name="header">
+                  <p:row >
+                     <p:column colspan="7" >Informações de contato com o cliente</p:column>
+                    </p:row>
+                 </f:facet> 
+                     <h:outputText value="Celular: #{clientes.celular}" style="font-weight:bold"/>
+                     <h:outputText value="Fone: #{clientes.fone}" style="font-weight:bold"/>
+                     <h:outputText value="WhatsApp: #{clientes.whatsapp}" style="font-weight:bold"/>
+                     <h:outputText value="e-mail: #{clientes.email}" style="font-weight:bold"/>
+                  </h:panelGrid>
+               </p:tab> 
+            <p:tab title="Dados de Endereço"  >
+            <h:panelGrid columns="1" cellpadding="1">
+                <f:facet name="header">
+                  <p:row>
+                     <p:column colspan="7">Informações de endereço do cliente</p:column>
+                    </p:row>
+                 </f:facet> 
+                     <h:outputText value="Rua: #{clientes.rua}" style="font-weight:bold"/>
+                     <h:outputText value="Nro: #{clientes.nro}" style="font-weight:bold"/>
+                     <h:outputText value="Bairro: #{clientes.bairro}" style="font-weight:bold"/>
+                     <h:outputText value="Cidade: #{clientes.cidade}" style="font-weight:bold"/>
+                     <h:outputText value="Cep: #{clientes.cep}" style="font-weight:bold"/>
+                     <h:outputText value="UF: #{clientes.estado.nome}" style="font-weight:bold"/>
+                   </h:panelGrid>
+               </p:tab> 
+              <p:tab title="Dados Pessoais"  >
+                <h:panelGrid columns="1" cellpadding="1">
+                <f:facet name="header">
+                  <p:row>
+                     <p:column colspan="7" >Informações pessoais do cliente</p:column>
+                    </p:row>
+                 </f:facet> 
+                     <h:outputText value="Estado Civil: #{clientes.estadocivil.descricao}" style="font-weight:bold"/>
+                     <h:outputText value="Sexo: #{clientes.sexo.descricao}" style="font-weight:bold"/>
+                     <h:outputText value="Natural: #{clientes.localnasimento}" style="font-weight:bold"/>
+                     <p:column >
+                     <h:outputText value="Aniversário: " style="font-weight:bold"/>
+                     <h:outputText  value="#{clientes.aniversario}" style="font-weight:bold">
+                        <f:convertDateTime locale="pt_BR"/>
+                     </h:outputText>
+                    </p:column>
+                     <h:outputText value="OBS: #{clientes.observacao}" style="font-weight:bold"/>
+                    </h:panelGrid>
+               </p:tab>
+                
+            </p:tabView>  
+         </p:panelGrid>
+       </p:rowExpansion> 
+         
+                  
+        <p:column headerText="Id" width="10%">
+            <h:outputText value="#{clientes.codigo}" />
+        </p:column>
+ 
+        <p:column headerText="Nome">
+            <h:outputText value="#{clientes.nomecliente}" />
+        </p:column>
+ 
+        <p:column headerText="CPF">
+            <h:outputText value="#{clientes.cpf}" />
+        </p:column>
+  
+         <p:column headerText="RG">
+            <h:outputText value="#{clientes.rg}" />
+        </p:column>
+        
+        <p:column headerText="Celular">
+            <h:outputText value="#{clientes.celular}" />
+        </p:column>
+                
+        <p:column headerText="Ação" width="15%">
+          <p:commandButton icon="fa fa-fw fa-edit" title="editar" 
+           rendered="#{autenticacaoBean.userLogin.perfil=='ADMINISTRADOR'||autenticacaoBean.userLogin.perfil=='PADRAO'}"
+           actionListener="#{clienteBean.editar}"
+           oncomplete="PF('cadastroCliDL').show()"
+           update="formClienteDL"
+           style="color:#ffffff; background:#00e600"  >
+            <f:attribute  name="clienteSelecionado" value="#{clientes}"/>
+             <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+           </p:commandButton>
+           <p:commandButton icon="fa fa-print" title="Ficha Cliente" 
+              actionListener="#{clienteBean.editarPrint}"
+              action="#{clienteBean.imprimirFicha}"
+              onclick="this.form.target='_blank'" 
+              style="color:#ffffff; background:#527a7a"
+              ajax="false" >
+             <f:attribute  name="clienteSelecionado" value="#{clientes}"/>
+             <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+           </p:commandButton>
+           
+         </p:column>
+       <f:facet name="paginatorTopLeft">
+            <p:commandButton type="button" icon="pi pi-refresh" />
+       </f:facet>
+ 
+        <f:facet name="paginatorBottomRight">
+            <p:commandButton type="button" icon="pi pi-cloud-upload" />
+        </f:facet>
+ 
+    </p:dataTable>
+    </h:form>
+    </p:layoutUnit>
+ </p:layout>
+ 
+   <p:dialog header="Formulário de clientes" closable="true" draggable="false"
+      modal="true" visible="false" widgetVar="cadastroCliDL">
+       <h:form id="formClienteDL">
+          <h:panelGrid columns="9">
+          <p:outputLabel for="nome" value="Nome: " />
+          <p:spacer width="25" height="25" />
+            <p:inputText id="nome" value="#{clienteBean.cliente.nomecliente}" required="true"
+            size="30" placeholder="Informe o nome" requiredMessage="O Nome é obrigatório"/> 
+          <p:outputLabel for="cpf" value="CPF: " />
+            <p:inputMask mask="999-999-999-99"  id="cpf" value="#{clienteBean.cliente.cpf}" required="true"
+            size="20" placeholder="Informe o cpf" requiredMessage="O CPF é obrigatório"/> 
+            <p:outputLabel for="RG" value="RG: " />
+            <p:inputText id="RG" value="#{clienteBean.cliente.rg}" required="true"
+            size="20" placeholder="Informe o RG" requiredMessage="O RG é obrigatório"/> 
+            <p:outputLabel for="emissor" value="Emissor: " />
+            <p:inputText id="emissor" value="#{clienteBean.cliente.emissor}"  
+            size="12" placeholder="emissor"  />
+         </h:panelGrid>
+         <br/>
+         <h:panelGrid columns="10">
+           <h:form>
+             <p:outputLabel for="celular" value="Celular: " />
+             <p:spacer width="20" height="20" />
+             <p:inputMask mask="(99)99?99-99999"  id="celular" value="#{clienteBean.cliente.celular}" required="true"
+            size="15"   requiredMessage="O celuar é obrigatório"/>
+            <p:outputLabel for="fone" value="Fone: " />
+            <p:inputMask mask="(99)99?99-99999"  id="fone" value="#{clienteBean.cliente.fone}" 
+            size="15"    />
+            </h:form>
+            <p:outputLabel for="whats" value="WhatsApp: " />
+            <p:inputText  id="whats" value="#{clienteBean.cliente.whatsapp}" 
+            size="15"    />
+            <p:outputLabel for="mail" value="e-mail: " />
+            <p:inputText  id="mail" value="#{clienteBean.cliente.email}" 
+            size="20"    />
+         </h:panelGrid>
+         <h:panelGrid columns="10">
+           <p:outputLabel  value="Rua: " />
+           <p:spacer width="64" height="64" />
+           <p:inputText value="#{clienteBean.cliente.rua}" size="35" />
+           <p:outputLabel  value="Nro: " />
+           <p:inputText value="#{clienteBean.cliente.nro}" size="10" onkeyup="somenteNumeros(this);" />
+           <p:outputLabel  value="Bairro: " />
+           <p:inputText value="#{clienteBean.cliente.bairro}" size="35" />
+           </h:panelGrid> 
+           <h:panelGrid columns="9">   
+           <p:outputLabel  value="Cidade: " />
+           <p:spacer width="40" height="40" /> 
+           <p:inputText value="#{clienteBean.cliente.cidade}" size="35" /> 
+           <p:outputLabel  value="Cep: " />
+           <p:inputMask mask="99-999-999" value="#{clienteBean.cliente.cep}" size="20" />
+           <p:outputLabel  value="UF: " />
+           <p:selectOneMenu id="uf" value="#{clienteBean.cliente.estado}"    style="width:125px">
+			  <f:selectItem noSelectionOption="true" itemValue="" itemLabel="Estado"/>
+			  <f:selectItems value="#{clienteBean.estado}" 
+			  var="estado"
+			  itemValue="#{estado}"
+			  itemLabel="#{estado.uf}"
+			  />
+              </p:selectOneMenu>
+           </h:panelGrid> 
+           <h:panelGrid columns="9">
+             <p:outputLabel  value="Estado Civil: " />
+              <p:selectOneMenu id="civil" value="#{clienteBean.cliente.estadocivil}" style="width:25px">
+			  <f:selectItem noSelectionOption="true" itemValue="" itemLabel="civil"/>
+			  <f:selectItems value="#{clienteBean.estatoCivil}" 
+			  var="civil"
+			  itemValue="#{civil}"
+			  itemLabel="#{civil.descricao}"
+			  />
+			  </p:selectOneMenu>
+             <p:outputLabel  value="Naturalidade: " />
+             <p:inputText value="#{clienteBean.cliente.localnasimento}" size="30" />
+             <p:outputLabel  value="Nascimento: " />
+             <p:calendar id="button" value="#{clienteBean.cliente.aniversario}" showOn="button" />
+              <p:outputLabel  value="Sexo: " />
+              <p:selectOneMenu id="sexo" value="#{clienteBean.cliente.sexo}" style="width:25px">
+			  <f:selectItem noSelectionOption="true" itemValue="" itemLabel="Sexo"/>
+			  <f:selectItems value="#{clienteBean.sexo}" 
+			  var="sexo"
+			  itemValue="#{sexo}"
+			  itemLabel="#{sexo.descricao}"
+			  />
+			  </p:selectOneMenu>
+            </h:panelGrid> 
+            
+            <h:panelGrid columns="9">
+             <p:outputLabel  value="Obs: " />
+             <p:spacer width="63" height="63" />
+              <p:inputText value="#{clienteBean.cliente.observacao}" size="70" />
+             </h:panelGrid> 
+         <h:panelGrid columns="2">							
+        <p:commandButton value="Salvar"  
+         actionListener="#{clienteBean.salvar}"
+         update="mensagem :tabclientes"  
+        style="margin-right:5px;"
+        ajax="false"
+          />
+        
+	    <p:commandButton value="Sair" 
+	    style="margin-right:5px;"
+        onclick="PF('cadastroCliDL').hide()" >	
+        <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>																	
+        </p:commandButton>
+        </h:panelGrid>
+      
+     </h:form>
+     </p:dialog>
+ </h:body> 
+</html>

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fp="http://xmlns.jcp.org/jsf/core"
+       >
+     <h:head>
+      <h:outputStylesheet library="css" name="style.css"/>
+     <title>Lista de Serviços e Categorias</title> 
+      
+     
+     
+      </h:head>  
+      
+      
+    <h:body>
+     
+    
+    
+     <p:growl id="mensagem"/>
+     <p:layout fullPage="true">
+
+    <p:layoutUnit position="north" size="50" header="Lista de Serviços e Categorias" resizable="true" closable="true" collapsible="true">
+       
+    </p:layoutUnit>
+
+    <p:layoutUnit position="south" size="100" header="Bottom" resizable="true" closable="true" collapsible="true">
+        <h:outputText value="South unit content." />
+    </p:layoutUnit>
+
+    <p:layoutUnit position="west" size="200" header="Menu Inicial" resizable="true" closable="true" collapsible="true">
+        <h:form>
+
+                <p:panelMenu
+                     >
+                    <p:submenu label="Arquivo">
+                        <p:menuitem value="Página Principal" 
+                          action="#{usuarioBean.inicialPage}"
+                          />
+                        
+                    </p:submenu>
+                     <p:submenu label="Servicos">
+                        <p:menuitem value="Novo Serviço" oncomplete="PF('cadastroServDL').show()"/>
+                    </p:submenu>
+                    <p:submenu label="Categoria">
+                        <p:menuitem value="Nova Categoria" oncomplete="PF('cadastroCatDL').show()"/>
+                    </p:submenu>
+                  </p:panelMenu>
+             </h:form>
+    </p:layoutUnit>
+
+    <p:layoutUnit position="east" size="500" header="Categorias de Serviços" resizable="true" 
+    closable="true" collapsible="true" effect="drop">
+         <h:form>
+         <p:dataTable  id="tabCategoriaServico" var="categorias" value="#{categoriaServicoBean.categorias}"  rows="14"
+                 paginator="true"
+                 editable="true" 
+                 rowsPerPageTemplate="5,10,15"
+                 rendered="true"
+                 >
+               
+        <p:column headerText="Id" width="10%">
+            <h:outputText value="#{categorias.codigo}" />
+        </p:column>
+ 
+        <p:column headerText="Descricão">
+            <h:outputText value="#{categorias.descricao}" />
+        </p:column>
+ 
+        <p:column headerText="Observação">
+            <h:outputText value="#{categorias.observacao}" />
+        </p:column>
+        <p:column headerText="Ação" width="15%">
+          <p:commandButton icon="fa fa-fw fa-edit" title="editar" 
+           actionListener="#{categoriaServicoBean.editar}"
+           oncomplete="PF('cadastroCatDL').show()"
+           update="formCatDL"
+             >
+            <f:attribute  name="categoriaSelecionado" value="#{categorias}"/>
+             
+           </p:commandButton>
+            <p:commandButton  icon="fa fa-trash"  title="excluir" 
+             actionListener="#{navegacaoBean.cadastrarUsuario}" 
+            >
+          </p:commandButton>
+           
+        </p:column>
+       <f:facet name="paginatorTopLeft">
+            <p:commandButton type="button" icon="pi pi-refresh" />
+       </f:facet>
+ 
+        <f:facet name="paginatorBottomRight">
+            <p:commandButton type="button" icon="pi pi-cloud-upload" />
+        </f:facet>
+      </p:dataTable>
+      </h:form>
+    </p:layoutUnit>
+
+    <p:layoutUnit position="center">
+    <h:form>
+    <p:dataTable  id="tabServicos" var="servicos" value="#{servicosBean.servicos}"  rows="14"
+                 paginator="true"
+                 editable="true" 
+                 rowsPerPageTemplate="5,10,15"
+                 rendered="true">
+        <f:facet name="header">
+             <p:row style="background-color:#000000;" >
+             <p:column colspan="7" > Tabela de Serviços </p:column>
+            </p:row>
+         </f:facet>         
+        <p:column headerText="Id" width="10%">
+            <h:outputText value="#{servicos.codigo}" />
+        </p:column>
+ 
+        <p:column headerText="Descricão">
+            <h:outputText value="#{servicos.descricao}" />
+        </p:column>
+ 
+        <p:column headerText="Valor R$">
+            <h:outputText value="#{servicos.precoTotal}" />
+        </p:column>
+  
+         <p:column headerText="Categoria">
+            <h:outputText value="#{servicos.categoria.descricao}" />
+        </p:column>
+        
+        <p:column headerText="Obs">
+            <h:outputText value="#{servicos.observacao}" />
+        </p:column>
+                
+        <p:column headerText="Ação" width="15%">
+          <p:commandButton icon="fa fa-fw fa-edit" title="editar" 
+           actionListener="#{servicosBean.editar}"
+           oncomplete="PF('cadastroServDL').show()"
+           update="formServDL"
+             >
+            <f:attribute  name="servicoSelecionado" value="#{clientes}"/>
+             
+           </p:commandButton>
+            <p:commandButton  icon="fa fa-trash"  title="excluir" 
+             actionListener="#{navegacaoBean.cadastrarUsuario}" 
+            >
+          </p:commandButton>
+           
+        </p:column>
+       <f:facet name="paginatorTopLeft">
+            <p:commandButton type="button" icon="pi pi-refresh" />
+       </f:facet>
+     <f:facet name="paginatorBottomRight">
+            <p:commandButton type="button" icon="pi pi-cloud-upload" />
+        </f:facet>
+     </p:dataTable>
+    <br />
+    <br/>
+    </h:form>
+    </p:layoutUnit>
+ </p:layout>
+ 
+   <p:dialog header="Formulário de Serviços" closable="true" draggable="false"
+      modal="true" visible="false" widgetVar="cadastroServDL">
+       <h:form id="formServDL">
+          <h:panelGrid columns="6">
+          <p:outputLabel for="desc" value="Descrição: " />
+          <p:spacer width="2" height="2" />
+            <p:inputText id="desc" value="#{servicosBean.servico.descricao}" required="true"
+            size="35" placeholder="Descrição" requiredMessage="Descrição é obrigatório"/> 
+          <p:outputLabel for="val" value="Valor: " />
+          <p:spacer width="10" height="10" />
+            <p:inputText mask=" "  id="val" value="#{servicosBean.servico.precoTotal}" required="true"
+            size="10" placeholder="R$: 9,99" requiredMessage="O valor obrigatório"/> 
+            </h:panelGrid>
+            <br/>
+            <h:panelGrid columns="7">
+            <p:outputLabel  value="Observação: " />
+            <p:spacer width="7" height="7" />
+            <p:inputText id="obs" value="#{servicosBean.servico.observacao}" required="true"
+            size="35" placeholder="Observações" /> 
+            <p:outputLabel  value="Categoria: " />
+            <p:selectOneMenu value="#{servicosBean.categoria.descricao}" style="width:125px"
+								converter="omnifaces.SelectItemsConverter"
+								required="true" requiredMessage="O campo 'Categoria' é obrigatório" >
+								<f:selectItem noSelectionOption="true" itemValue="" itemLabel="Selecione Categoria"/>
+								<f:selectItems value="#{servicosBean.categorias}" var="cat" 
+								itemValue="#{cat}" itemLabel="#{cat.descricao}"
+								/>
+              </p:selectOneMenu>
+           </h:panelGrid>
+         <br/>
+         <h:panelGrid columns="2">							
+        <p:commandButton value="Salvar"  
+         actionListener="#{servicosBean.salvar}"
+         update="mensagem :tabServicos"  
+        style="margin-right:5px;"
+        ajax="false"
+          />
+        <p:commandButton value="Sair" 
+	    style="margin-right:5px;"
+        onclick="PF('cadastroServDL').hide()"  />																		
+        </h:panelGrid>
+      </h:form>
+     </p:dialog>
+     
+      <p:dialog header="Formulário Categoria Serviços" closable="true" draggable="false"
+      modal="true" visible="false" widgetVar="cadastroCatDL">
+       <h:form id="formCatDL">
+          <h:panelGrid columns="5">
+          <p:outputLabel for="catDesc" value="Descrição: " />
+          <p:spacer width="2" height="2" />
+            <p:inputText id="catDesc" value="#{categoriaServicoBean.categoria.descricao}" required="true"
+            size="35" placeholder="Descrição" requiredMessage="Descrição é obrigatório"/> 
+            </h:panelGrid>
+            <br/>
+            <h:panelGrid columns="7">
+            <p:outputLabel  value="Observação: " />
+            <p:spacer width="8" height="8" />
+            <p:inputText id="obs" value="#{categoriaServicoBean.categoria.observacao}" 
+            size="35" placeholder="Observações" /> 
+             
+            </h:panelGrid>
+         <br/>
+         <h:panelGrid columns="2">							
+        <p:commandButton value="Salvar"  
+         actionListener="#{categoriaServicoBean.salvar}"
+         update="mensagem :tabCategoriaServico"  
+        style="margin-right:5px;"
+        ajax="false"
+          />
+        <p:commandButton value="Sair" 
+	    style="margin-right:5px;"
+        onclick="PF('cadastroCatDL').hide()" />																		
+        </h:panelGrid>
+      </h:form>
+     </p:dialog>
+ </h:body> 
+</html>

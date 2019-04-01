@@ -1,0 +1,42 @@
+  
+            .ui-panel, div.ui-state-hover {
+                margin: 10px;
+                width:200px;
+            }
+             
+            .ui-dashboard-column {
+                width:220px;
+            }
+  
+  .subnavegacao{
+    border: 0px;
+    width: width: 99%; height: 99%;
+
+}
+ 
+.cordoBottom{
+	background: red !important;
+}
+
+ 
+    
+.ocupada .ui-panel-titlebar {
+    background: #334d4d;
+    color:#ffffff;
+}
+
+.totalCliente .ui-panel-titlebar {
+    background: #d1e0e0;
+    color:#000000;
+}
+.totalOrcamentos .ui-panel-titlebar {
+    background: #d1e0e0;
+    color:#000000;
+}
+ 
+ .aniversariantesDataList .ui-datalist-data {
+        padding-left: 20px;
+        background:  #e0ebeb;
+        color:#000000;
+    }
+ 

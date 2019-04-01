@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//src/main/java=ISO-8859-1
+encoding//src/main/webapp/reports/clientes.jrxml=UTF-8
+encoding//src/main/webapp/reports/fichaCliente.jrxml=UTF-8
+encoding//src/main/webapp/reports/funcionarios.jrxml=UTF-8
+encoding//src/main/webapp/reports/orcamento.jrxml=UTF-8
+encoding//src/main/webapp/reports/orcamentosLista.jrxml=UTF-8
+encoding//src/main/webapp/reports/produtos.jrxml=UTF-8
+encoding//src/test/java=ISO-8859-1

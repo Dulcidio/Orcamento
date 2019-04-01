@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fp="http://xmlns.jcp.org/jsf/core" 
+       >
+     <h:head>
+      <h:outputStylesheet library="css" name="style.css"/>
+      <title>Lista Usuários</title> 
+      <p:growl id="mensagem"/>
+      
+       
+       
+     </h:head>  
+     <h:body>
+     <p:layout id="listarAll" fullPage="true">
+
+    <p:layoutUnit position="north" size="50" header="Lista de Usuários" resizable="true" closable="true" collapsible="true">
+    
+    </p:layoutUnit>
+ 
+ <p:layoutUnit header="Menu Inicial" size="200" position="west"
+            resizable="false" closable="false" collapsible="false">
+           <h:form>
+
+                <p:panelMenu
+                     >
+                    <p:submenu label="Inicio" 
+                         style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;">
+                        <p:menuitem value="Página Principal" 
+                        icon="fa fa-home"
+                        style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;"
+                         action="#{usuarioBean.voltaInicio}"
+                          />
+                       
+                    </p:submenu>
+ 
+                    <p:submenu label="Usuários" style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;">
+                       
+                      <p:menuitem value="Novo Usuário"
+                         oncomplete="PF('cadastrarUsuarioDG').show();" 
+                         icon="fa fa-plus-square-o"
+                         style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;"
+                          >
+                         
+                      </p:menuitem>   
+                    </p:submenu>
+
+                </p:panelMenu>
+
+            </h:form>
+
+        </p:layoutUnit>
+ <h:form   id="formListaUser" >
+    <p:layoutUnit id="layoutListaUser" position="center">
+      <p></p>
+    <p:dataTable  id="tabUser" var="user" value="#{usuarioBean.usuarios}" rows="14"
+                 paginator="true"
+                 editable="true" 
+                 rowsPerPageTemplate="5,10,15"
+                 rendered="true">
+        <p:column headerText="Id">
+            <h:outputText value="#{user.codigo}" />
+        </p:column>
+ 
+        <p:column headerText="Usuário">
+        
+            <h:outputText value="#{user.username}" />
+        </p:column>
+        <p:column headerText="Senha" resizable="false" width="10%">
+           <h:outputText value="#{user.senha}" />
+        </p:column>
+         
+        
+         <p:column headerText="Perfil">
+            <h:outputText value="#{user.perfil}" />
+        </p:column>
+        
+         <p:column headerText="Funcionário">
+            <h:outputText value="#{user.funcionario.nome}" />
+        </p:column>
+        <p:column headerText="Ação" width="15%">
+          <p:commandButton icon="fa fa-fw fa-edit" title="editar" 
+           actionListener="#{usuarioBean.editar}"
+           oncomplete="PF('AlterarUsuarioDG').show()"
+           update="alterarUserDL:gridPanelLoginAlter  alterarUserDL:gridPanelLoginAlter3 alterarUserDL:gridPanelLoginAlter4  alterarUserDL:panelGridUser"
+           style="color:#ffffff; background:#00e600" 
+             >
+            <f:attribute  name="usuarioSelecionado" value="#{user}"/>
+             
+           </p:commandButton>
+          <p:commandButton  icon="fa fa-trash"  title="excluir" 
+             actionListener="#{usuarioBean.excluir}" 
+             style="color:#ffffff; background:#e60000"
+             update="mensagem :formListaUser:tabUser" 
+              >
+             <p:confirm header="Confirmar Exclusão"
+             icon="ui-icon-alert"
+              message="Deseja excluir usuário? Operação não pode ser desfeita!"
+               ></p:confirm>
+             <f:attribute  name="usuarioSelecionado" value="#{user}"/>
+          </p:commandButton>
+           <p:commandButton  icon="fa fa-unlock"  title="alterar senha" 
+             actionListener="#{usuarioBean.editar}"
+             oncomplete="PF('AlterSenha').show();" 
+             update="alterSenhaDL "
+             style="color:#ffffff; background:#e68a00"
+            >
+            <f:attribute  name="usuarioSelecionado" value="#{user}"/>
+          </p:commandButton>
+        </p:column>
+         
+        <f:facet name="paginatorTopLeft">
+            <p:commandButton type="button" icon="pi pi-refresh" />
+        </f:facet>
+ 
+        <f:facet name="paginatorBottomRight">
+            <p:commandButton type="button" icon="pi pi-cloud-upload" />
+        </f:facet>
+ 
+    </p:dataTable>
+    
+     <p:confirmDialog global="true">
+       <p:commandButton value="Sim" type="button"
+       styleClass="ui-confirmdialog-yes" icon="ui-icon-chek"></p:commandButton>
+       <p:commandButton value="Não" type="button"
+       styleClass="ui-confirmdialog-no" icon="ui-icon-close">
+       
+       </p:commandButton>
+     </p:confirmDialog>
+
+    </p:layoutUnit>
+   </h:form>
+</p:layout>
+   <p:dialog header="Alterar Senha!" closable="false" draggable="false" modal="true"  widgetVar="AlterSenha">
+       <h:form id="alterSenhaDL">
+        <p:outputLabel value="Alterar a senha do login: #{usuarioBean.usuario.username}"></p:outputLabel>
+        <h:panelGrid columns="5">
+        <p:outputLabel for="senha" value="Senha: "  />
+			  <p:spacer width="20" height="20" />
+			  <p:password id="senha"  size="20" value="#{usuarioBean.usuario.senha}"
+			  maxlength="8" match="senha2"
+			  required="true" requiredMessage="O campo 'Senha' é obrigatório"
+			  feedback="true" promptLabel="Força da Senha" weakLabel="Fraca"
+                    goodLabel="Média" strongLabel="Forte"
+                    validatorMessage="As senhas não conferem!"
+                    redisplay="true"
+                    >
+			  
+			  </p:password>
+			  <br></br><br/><br />
+			  <p:spacer width="20" height="20" />
+			  <p:outputLabel for="senha2"  value="Confir: "  />
+			  <p:spacer width="20" height="20" />
+			  <p:password id="senha2"  size="20" value="#{usuarioBean.usuario.senha}"
+			  maxlength="8" 
+			  required="true" requiredMessage="O campo 'Confirmar' é obrigatório"
+			  validatorMessage="Senha deve ter minimo 4 digitos!"
+			  redisplay="true">
+			  <f:validateLength minimum="4" ></f:validateLength>
+			  </p:password>
+		 	</h:panelGrid>	
+		 	
+		 	<h:panelGrid columns="2">					
+        <p:commandButton value="Salvar"  
+          actionListener="#{usuarioBean.alterarSenha}"
+          style="margin-right:5px;"
+          ajax="false" 
+          update=":mensagem :tabUser"   
+         />
+        <p:commandButton value="Sair" 
+	    style="margin-right:5px;"
+          ajax="false"  />																		
+         </h:panelGrid>
+       </h:form>
+       </p:dialog>
+       
+    <p:dialog header="Editar Usuário" closable="true" draggable="false" 
+               modal="true" widgetVar="AlterarUsuarioDG">
+       <h:form id="alterarUserDL">
+             <b>Alterar o cadastro do usuário</b>
+          <p></p>
+             <h:panelGrid   columns="11" id="gridPanelLoginAlter" >
+              <p:spacer width="20" height="20" />
+              <p:outputLabel for="login" value="Login: "  />
+              <p:spacer width="30" height="30" />
+			  <p:inputText id="login" size="30" placeholder="informe o login" value="#{usuarioBean.usuario.username}"
+			  required="true" requiredMessage="O campo 'Login' é obrigatório"
+			  widgetVar=""/>
+			 </h:panelGrid> 
+			  <h:panelGrid   columns="11"  id="gridPanelLoginAlter3"> 
+			  <p:spacer width="20" height="20" />
+			  <p:outputLabel value="Perfil: "  />
+			  <p:spacer width="56" height="56" />
+			  <p:selectOneMenu id="perfil" value="#{usuarioBean.usuario.perfil}"    style="width:215px" 
+			  required="true" requiredMessage="O campo 'perfil' é obrigatório"
+			  >
+			  <f:selectItem noSelectionOption="true" itemValue="" itemLabel="Tipo do Perfil"/>
+			  <f:selectItems value="#{usuarioBean.perfil}" 
+			  var="perfil"
+			  itemValue="#{perfil}"
+			  itemLabel="#{perfil.perfil}"
+			  />
+              </p:selectOneMenu>
+              </h:panelGrid>
+              <h:panelGrid   columns="11" id="gridPanelLoginAlter4">
+              <p:spacer width="20" height="20" />
+              
+              </h:panelGrid>
+              <h:panelGrid   columns="11"  id="panelGridUser"> 
+              <p:spacer width="20" height="20" />
+              <p:outputLabel value="Funcionário: "  />
+			  <p:selectOneMenu value="#{usuarioBean.usuario.funcionario}" style="width:215px"
+								converter="omnifaces.SelectItemsConverter"
+								required="true" requiredMessage="O campo 'Funcionário' é obrigatório" >
+								<f:selectItem noSelectionOption="true" itemValue="#{usuarioBean.usuario.funcionario.nome}" 
+								itemLabel="#{usuarioBean.usuario.funcionario.nome}"/>
+								<f:selectItems value="#{funcionarioBean.funcionarios}" var="Funcionario" 
+								itemValue="#{Funcionario}" itemLabel="#{Funcionario.nome}"
+								/>
+              </p:selectOneMenu>
+              
+			  <p:spacer width="52" height="52" />
+			  </h:panelGrid>
+			  <h:panelGrid columns="2">	
+			  <h:form>				
+        <p:commandButton value="Salvar"  
+          actionListener="#{usuarioBean.alterar}"
+           style="margin-right:10px;"
+            ajax="false" 
+            update=":mensagem :tabUser"  
+            onclick="PF('AlterarUsuarioDG').hide();" 
+         />
+        <p:commandButton value="Sair" 
+	      style="margin-right:5px;"
+	      onclick="PF('AlterarUsuarioDG').hide();" 
+           />	
+          </h:form>																	
+         </h:panelGrid>
+    </h:form>
+   </p:dialog>
+   
+    <p:dialog header="Cadastrar Usuário" closable="true" draggable="false" 
+               modal="true" widgetVar="cadastrarUsuarioDG">
+       <h:form id="cadastrarUsuarioDL">
+        <b >Cadastrar usuário</b>
+          <p></p>
+             <h:panelGrid  columns="11" >
+              <p:spacer width="15" height="15" />
+              <p:outputLabel id="log" for="login" value="Login: " />
+                   
+              <p:spacer width="30" height="30" />
+			  <p:inputText id="login" size="30" placeholder="informe o login" value="#{usuarioBean.usuario.username}"
+			  required="true" requiredMessage="O campo 'Login' é obrigatório"
+			  />
+			  </h:panelGrid> 
+			  <h:panelGrid   columns="5" >
+			  <p:spacer width="18" height="18" />
+			  <p:outputLabel for="senha" value="Senha: " title="*A senha deve ter no minimo 4 digitos (Alfanuméricos) e no máximo 8" />
+			  <p:spacer width="20" height="20" />
+			  <p:password id="senha"  size="20" value="#{usuarioBean.usuario.senhaSemCriptografia}"
+			  maxlength="8" match="senha2"
+			  required="true" requiredMessage="O campo 'Senha' é obrigatório"
+			  feedback="true" promptLabel="Força da Senha" weakLabel="Fraca"
+                    goodLabel="Média" strongLabel="Forte"
+                    validatorMessage="As senhas não conferem!"
+                    >
+			  
+			  </p:password>
+			  <br></br><br/><br />
+			  <p:spacer width="20" height="20" />
+			  <p:outputLabel for="senha2"  value="Confir: "  />
+			  <p:spacer width="20" height="20" />
+			  <p:password id="senha2"  size="20"
+			  maxlength="8" 
+			  required="true" requiredMessage="O campo 'Confirmar' é obrigatório"
+			  validatorMessage="Senha deve ter minimo 4 digitos!">
+			  <f:validateLength minimum="4" ></f:validateLength>
+			  </p:password>
+			   
+			  </h:panelGrid> 
+			  <h:panelGrid   columns="11" > 
+			  <p:spacer width="20" height="20" />
+			  <p:outputLabel value="Perfil: "  title="*Fique atento ao nivel de permissão selecionado ao novo usuário"/>
+			  <p:spacer width="52" height="52" />
+			  <p:selectOneMenu id="perfil" value="#{usuarioBean.usuario.perfil}"    style="width:125px" 
+			  required="true" requiredMessage="O campo 'perfil' é obrigatório">
+			  <f:selectItem noSelectionOption="true" itemValue="" itemLabel="Tipo do Perfil"/>
+			  <f:selectItems value="#{usuarioBean.perfil}" 
+			  var="perfil"
+			  itemValue="#{perfil}"
+			  itemLabel="#{perfil.perfil}"
+			  />
+              </p:selectOneMenu>
+              </h:panelGrid>
+              
+              <h:panelGrid   columns="11" > 
+              <p:spacer width="20" height="20" />
+              <p:outputLabel value="Funcionário: "  title="*Deve selecionar o funcionário a qual o login vai ser vinculado" />
+			  <p:selectOneMenu value="#{usuarioBean.usuario.funcionario}" style="width:125px"
+								converter="omnifaces.SelectItemsConverter"
+								required="true" requiredMessage="O campo 'Funcionário' é obrigatório" >
+								<f:selectItem noSelectionOption="true" itemValue="#{funcionarioBean.funcionario}" 
+								itemLabel="#{funcionarioBean.funcionario.nome}"/>
+								<f:selectItems value="#{funcionarioBean.funcionarios}" var="Funcionario" 
+								itemValue="#{Funcionario}" itemLabel="#{Funcionario.nome}"
+								/>
+              </p:selectOneMenu>
+              
+			  <p:spacer width="52" height="52" />
+			  </h:panelGrid>
+           <h:panelGrid columns="2">	
+		 			
+          <p:commandButton value="Salvar" id="salvar" style="margin-right:20px;"  
+               actionListener="#{usuarioBean.salvar}"
+               update="mensagem "  />
+        <p:commandButton value="Sair" 
+	      style="margin-right:5px;"
+	      onclick="PF('cadastrarUsuarioDG').hide();" 
+           />	
+          																
+         </h:panelGrid>
+          </h:form>
+   </p:dialog>
+    
+     
+ </h:body> 
+ 
+</html>

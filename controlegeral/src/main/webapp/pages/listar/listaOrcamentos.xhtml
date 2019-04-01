@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fp="http://xmlns.jcp.org/jsf/core"
+       
+       >
+       
+      <f:metadata>
+         <f:viewAction action="#{orcamentoBean.carregaOrcamentos}"></f:viewAction>
+         <f:viewAction action="#{orcamentoBean.carregaFunfClien}"></f:viewAction>
+      </f:metadata>
+             
+     <h:head>
+      <h:outputStylesheet library="css" name="style.css"/>
+     <title>Lista de Orçamentos</title> 
+     
+      <style type="text/css">
+        .cancelado {
+        background-color:  #476b6b !important;
+        background-image: none !important;
+        color: #ffffff !important;
+           }
+      </style>
+       <style type="text/css">
+        .ok {
+        background-color:   #ffffff !important;
+        background-image: none !important;
+        color: #000000 !important;
+           }
+      </style>
+     
+     
+     
+     
+     
+      </h:head>  
+      
+      
+    <h:body>
+     
+    
+    
+     <p:growl id="mensagem"/>
+     <p:layout fullPage="true">
+
+    <p:layoutUnit position="north" size="50" header="Lista de Orçamentos" resizable="true" closable="true" collapsible="true">
+       
+    </p:layoutUnit>
+
+     
+
+    <p:layoutUnit position="west" size="200" header="Menu Inicial" resizable="true" closable="true" collapsible="true">
+        <h:form id="formMeuInicial">
+
+                <p:panelMenu
+                     >
+                    <p:submenu label="Arquivo" style="font-size:14px ;
+                        font-weight:bold ; font-style: italic;">
+                        <p:menuitem value="Página Principal" 
+                         action="#{usuarioBean.inicialPage}" 
+                         icon="fa fa-home"
+                        style="font-size:14px ;
+                        font-weight:bold ; font-style: italic;"
+                          />
+                         
+                    </p:submenu>
+                     <p:submenu label="Orçamentos"  style="font-size:14px ;
+                        font-weight:bold ; font-style: italic;">
+                        <p:menuitem value="Novo"
+                        rendered="#{autenticacaoBean.userLogin.perfil=='ADMINISTRADOR'||autenticacaoBean.userLogin.perfil=='PADRAO'}"
+                        icon="fa fa-plus-square-o"
+                        style="font-size:14px ;
+                        font-weight:bold ; font-style: italic;"
+                        action="#{inicioBean.novoOrcamento}"
+                        />
+                         <p:menuitem icon="fa fa-print" value="Relatório Orçamentos"
+                         action="#{orcamentoBean.imprimirLista}"
+                         title="Lista completa de orçamentos"
+                         style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;"
+                         ajax="false"
+                         target="_blank"/>
+                    </p:submenu>
+                  </p:panelMenu>
+             </h:form>
+    </p:layoutUnit>
+    <p:layoutUnit position="center">
+        <h:form id="listaOrcamentoForm">
+    <p:dataTable  id="tabOrcamentos" var="orca" value="#{orcamentoBean.listadeOrcamentos}"  rows="14"
+                   
+                 paginator="true"
+                 editable="true" 
+                 rowStyleClass="#{orca.situacaoOrcamento.situacao eq  'Orçamento Cancelado' ? 'cancelado' : null || orca.situacaoOrcamento.situacao eq  'Orçamento Ok' ? 'ok' : null }"
+                 rendered="true"
+                 emptyMessage="nenhum orçamento registrado">
+        <f:facet name="header">
+        
+        </f:facet>         
+        <p:column width="4%">
+         <p:rowToggler />
+         </p:column>
+       <p:rowExpansion id="detalhesClientes" reflow="true" >
+            <p:panelGrid id="gridDetalhes"  styleClass="semBorda" columns="1"  >
+       <f:facet name="header">
+        <p:row>
+            <p:column colspan="7">Detalhes Orçamento</p:column>
+        </p:row>
+       </f:facet>  
+         <p:tabView reflow="true" style="color: #ff6600;" >
+          <p:tab title="Dados do Cliente Orçamento"  >
+            <h:panelGrid columns="1" cellpadding="1">
+                <f:facet  name="header">
+                  <p:row >
+                     <p:column colspan="7" >Informações de contato com o cliente</p:column>
+                    </p:row>
+                 </f:facet> 
+                     <h:outputText value="Nome: #{orca.cliente.nomecliente}" style="font-weight:bold"/>
+                     <h:outputText value="CPF: #{orca.cliente.cpf}" style="font-weight:bold"/>
+                     <h:outputText value="Celular: #{orca.cliente.celular}" style="font-weight:bold"/>
+                     <h:outputText value="Fone: #{orca.cliente.fone}" style="font-weight:bold"/>
+                     <h:outputText value="WhatsApp: #{orca.cliente.whatsapp}" style="font-weight:bold"/>
+                     <h:outputText value="e-mail: #{orca.cliente.email}" style="font-weight:bold"/>
+                  </h:panelGrid>
+               </p:tab> 
+            <p:tab title="Dados do Orçamento"  >
+            <h:panelGrid id="gridListaOrca" columns="1" cellpadding="1">
+                <f:facet name="header">
+                  <p:row>
+                     <p:column colspan="7">Informações do Orçamento</p:column>
+                    </p:row>
+                 </f:facet> 
+                     <h:outputText value="Nro: #{orca.codigo}" style="font-weight:bold"/>
+                     <p:column >
+                     <h:outputText value="Data: " style="font-weight:bold"/>
+                     <h:outputText value="#{orca.data}" style="font-weight:bold">
+                      <f:convertDateTime locale="pt_BR"/>
+                      </h:outputText>
+                     </p:column>
+                     <p:column >
+                     <h:outputText value="Total R$: "  style="font-weight:bold"/>
+                     <h:outputText value="#{orca.valorTotal}" style="font-weight:bold">
+                     <f:convertNumber locale="pt_BR" minFractionDigits="2"/>
+                     </h:outputText>
+                     </p:column>
+                     <h:outputText value="Desconto %: #{orca.desconto}" style="font-weight:bold"/>
+                     <h:outputText value="Funcionário: #{orca.funcionario.nome}" style="font-weight:bold"/>
+                     <h:outputText value="OBS: #{orca.observacoes}" style="font-weight:bold"/> 
+                   </h:panelGrid>
+               </p:tab> 
+               <p:tab title="Produtos / Serviços"  >
+            <h:panelGrid id="gridoProdServ" columns="1" cellpadding="1">
+                <f:facet name="header">
+                  <p:row>
+                     <p:column colspan="7">Informações Produtos/Servios</p:column>
+                    </p:row>
+                 </f:facet> 
+                     <p:dataTable id="itensOrcamento" emptyMessage="nenhum registro" value="#{orca.servicosOrcamento}" var="servicos">
+                       <p:column headerText="Produto/Serviço">
+                          <h:outputText value="#{servicos.produto.descricao}" />
+                       </p:column>
+                        <p:column headerText="Valor R$ x Qtd">
+                          <h:outputText value="#{servicos.valor}" >
+                          <f:convertNumber locale="pt_BR" minFractionDigits="2"/>
+                          
+                          </h:outputText>
+                       </p:column>
+                       <p:column headerText="QTD">
+                          <h:outputText value="#{servicos.quantidade}" />
+                       </p:column>
+                       <p:column headerText="Tipo">
+                          <h:outputText value="#{servicos.tipo}" />
+                       </p:column>
+                        
+                     
+                     </p:dataTable>
+                      
+                   </h:panelGrid>
+               </p:tab>
+            </p:tabView>  
+         </p:panelGrid>
+       </p:rowExpansion> 
+         
+                 
+        <p:column headerText="Cod" width="10%" filterBy="#{orca.codigo}" filterMatchMode="contains">
+            <h:outputText value="#{orca.codigo}" />
+        </p:column>
+ 
+        <p:column headerText="Valor">
+            <h:outputText value="#{orca.valorTotal}" >
+            <f:convertNumber locale="pt_BR" minFractionDigits="2"/>
+            </h:outputText>
+        </p:column>
+ 
+        <p:column headerText="Data" filterBy="#{orca.data}" filterMatchMode="contains">
+            <h:outputText value="#{orca.data}" >
+              <f:convertDateTime locale="pt_BR"/>
+             </h:outputText>
+        </p:column>
+  
+         <p:column headerText="Funcionário">
+            <h:outputText value="#{orca.funcionario.nome}" />
+        </p:column>
+        
+        <p:column headerText="Situação" filterBy="#{orca.situacaoOrcamento.situacao}" filterMatchMode="contains">
+            <h:outputText value="#{orca.situacaoOrcamento.situacao}" />
+        </p:column>
+        
+        <p:column headerText="Ação" width="15%" >
+          <p:commandButton icon="fa fa-trash-o" title="Cancelar Orçamento" id="editaOrcaBtn"
+           rendered="#{autenticacaoBean.userLogin.perfil=='ADMINISTRADOR'||autenticacaoBean.userLogin.perfil=='PADRAO'}"
+           actionListener="#{orcamentoBean.editar}"
+           style="color:#ffffff; background:#e60000"
+           ajax="false"
+           update="mensagem"
+            >
+            <f:attribute  name="orcamentoSelecionado" value="#{orca}"/>
+             <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+           </p:commandButton>
+           
+            <p:commandButton icon="fa fa-print" title="Imprimir Orçamento" 
+              actionListener="#{orcamentoBean.printOrcamento}"
+              action="#{orcamentoBean.imprimirOrcamento}"
+              style="color:#ffffff; background:#527a7a"
+              onclick="this.form.target='_blank'" 
+              ajax="false">
+             <f:attribute  name="orcamentoSelecionado" value="#{orca}"/>
+             <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+           </p:commandButton>
+           
+         </p:column>
+         
+      
+    
+    </p:dataTable>
+    </h:form>
+    </p:layoutUnit>
+ </p:layout>
+ 
+    
+ </h:body> 
+</html>

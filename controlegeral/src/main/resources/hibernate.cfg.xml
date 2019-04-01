@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+	<session-factory>
+  
+		
+		<!-- Configurações de Conexão com o Banco de Dados POSTGRESS-->
+		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+		<property name="connection.url">jdbc:postgresql://127.0.0.1:5432/base?currentSchema=base</property>
+		<property name="connection.username">postgres</property>
+		<property name="connection.password">root</property>
+
+		<!-- Pool de Conexões -->
+		<property name="connection.pool_size">1</property>
+
+		<!-- SQL dialect MYSQL
+		<property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property> -->
+		
+		<!-- SQL dialect -->
+		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		
+			<!-- Cache de Segundo Nível POSTGRESS -->
+		<property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+
+		<!-- Gerenciamento do Contexto das Sessões -->
+		<property name="current_session_context_class">thread</property>
+
+		<!-- Cache de Segundo Nível -->
+		<property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+
+		<!-- Mostra as SQLs Geradas -->
+		<property name="show_sql">true</property>
+		
+		 <!-- Cria as tabelas do banco de dados -->
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		 
+		<!-- Mapeamento das Entidades Cadastro Geral -->
+		<mapping class="br.com.loftsistemas.controlegeral.dominio.Funcionario"/>
+		<mapping class="br.com.loftsistemas.controlegeral.dominio.Usuario"/>
+		<mapping class="br.com.loftsistemas.controlegeral.dominio.Cliente"/>
+		<mapping class="br.com.loftsistemas.controlegeral.dominio.CategoriaServico"/>
+		<mapping class="br.com.loftsistemas.controlegeral.dominio.CategoriaProduto"/>
+		<mapping class="br.com.loftsistemas.controlegeral.dominio.Produto"/>
+		<mapping class="br.com.loftsistemas.controlegeral.dominio.Orcamento"/>
+		<mapping class="br.com.loftsistemas.controlegeral.dominio.ServicosOrcamento"/>
+		<mapping class="br.com.loftsistemas.controlegeral.dominio.Registro"/>
+		</session-factory>
+
+</hibernate-configuration>

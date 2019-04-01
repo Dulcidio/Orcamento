@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fp="http://xmlns.jcp.org/jsf/core"
+       >
+         
+       <f:metadata>
+          <f:viewAction action="#{clienteBean.listar}"></f:viewAction>
+          <f:viewAction action="#{orcamentoBean.detalhesOrcamento}"></f:viewAction>
+          <f:viewAction action="#{produtoBean.listar}"></f:viewAction>
+      </f:metadata>
+     
+        
+<h:head>
+ 
+      <h:outputStylesheet library="css" name="style.css"/>
+       
+       <script type="text/javascript">
+       var windowObjectReference;
+       var strWindowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+
+       function listarFuncionarios() {
+       windowObjectReference = window.open("listar/listaFuncionarios.xhtml", "Listar Funcionários", strWindowFeatures);
+       }
+       </script>
+        <script type="text/javascript">
+       var windowObjectReference;
+       var strWindowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+
+       function listarUsuarios() {
+       windowObjectReference = window.open("listaUsuarios.xhtml", "Lista Usuarios", strWindowFeatures);
+       }
+       </script>
+       <script type="text/javascript">
+       var windowObjectReference;
+       var strWindowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+
+       function cadastrarUsuarios() {
+       windowObjectReference = window.open("cadastro/usuarioCadastro.xhtml", "Cadastrar Usuarios", strWindowFeatures);
+       }
+       </script>
+       
+       <script type="text/javascript">
+       var windowObjectReference;
+       var strWindowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+       function cadastrarUsuarios() {
+       windowObjectReference = window.open("listar/listaFuncionarios.xhtml", "Funcionarios", strWindowFeatures);
+       }
+       </script>
+       
+       
+       <script type="text/javascript">
+       var windowObjectReference;
+       var strWindowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+       function menuClientes() {
+       windowObjectReference = window.open("listar/listaClientes.xhtml", "Funcionarios", strWindowFeatures);
+       }
+       </script>
+     <title>Loft Sistemas de Automação Comercial</title> 
+      
+     </h:head> 
+     
+     <h:body>
+     <p:growl id="mensagem"/>
+      <p:layout fullPage="true">
+       
+         <p:layoutUnit header="Sistema de orçamentos e cadastros" position="north"
+            resizable="false" closable="false" collapsible="false" style="font-size:20px ;
+            font-weight:bold ; font-style: italic;">
+             <h:form> 
+            <p:toolbar style="height:30px;" >
+               <f:facet name="left">
+                   
+                    <p:outputLabel value="Bem vindo: #{autenticacaoBean.userLogin.funcionario.nome}"
+                        style=" position: relative;left: 5px;" />
+                      
+                    <p:commandButton value="Sair"
+                        icon="fa fa-close"
+                        action="#{autenticacaoBean.sair}"
+                        update="mensagem"
+                        style="height:34px;width:110px; text-align:center;position: relative;left: 1120px;
+                        color:#ffffff; background:#00004d" 
+                          />
+                       
+                </f:facet>
+            </p:toolbar>
+           </h:form> 
+        </p:layoutUnit>
+
+        <p:layoutUnit header="Loft Sistemas de Automação e Controle "
+            position="south" resizable="false" closable="false"
+            collapsible="false">
+            <p:outputLabel value="#{usuarioBean.dataForm}"
+                        style=" position: relative;left: 1365px;" /> 
+        </p:layoutUnit>
+
+        <p:layoutUnit header="Menu Inicial" size="220" position="west"
+            resizable="false" closable="false" collapsible="false">
+            <h:form>
+
+                <p:panelMenu
+                     >
+                    <p:submenu label="Opções">
+                        <p:menuitem value="Página Principal" 
+                        action="#{usuarioBean.inicialPage}"
+                         icon="fa fa-home"
+                        style="font-size:14px ;
+                        font-weight:bold ; font-style: italic;"
+                        />
+                        <p:menuitem value="Registro" action="#{inicioBean.registro}"
+                         icon="fa fa-list-alt"
+                        style="font-size:14px ;
+                        font-weight:bold ; font-style: italic;"
+                        actionListener="#{registroBean.listar}"
+                    
+                        update="mensagem "
+                         />
+                        <p:menuitem value="Sair" action="#{autenticacaoBean.sair}"
+                         icon="fa fa-close"
+                        style="font-size:14px ;
+                        font-weight:bold ; font-style: italic;"
+                        update="mensagem"
+                         />
+                    </p:submenu>
+                    <p:submenu label="Cliente">
+                        <p:menuitem value="Clientes"
+                         action="#{inicioBean.cliente}"
+                         icon="fa fa-users"
+                        style="font-size:14px ;
+                        font-weight:bold ; font-style: italic;"/>
+                    </p:submenu>
+                    <p:submenu label="Funcionários">
+                        <p:menuitem value="Funcionários"
+                          action="#{inicioBean.funcionario}"
+                          icon="fa fa-male"
+                        style="font-size:14px ;
+                        font-weight:bold ; font-style: italic;"/>
+                    </p:submenu>
+                    
+                    <p:submenu label="Usuários" 
+                     rendered="#{autenticacaoBean.userLogin.perfil=='ADMINISTRADOR'}">
+                      <p:menuitem value="Usuários"
+                         action="#{inicioBean.usuario}"
+                         icon="fa fa-user-plus"
+                        style="font-size:14px ;
+                        font-weight:bold ; font-style: italic;"/>
+                    </p:submenu>
+                    <p:submenu label="Produtos/Serviços">
+                      <p:menuitem value="Produtos/Serviços"
+                        action="#{inicioBean.produtos}"
+                        icon="fa fa-cubes"
+                        style="font-size:14px ;
+                        font-weight:bold ; font-style: italic;"/>
+                    </p:submenu>
+                    <p:submenu label="Orçamentos">
+                    <p:menuitem value="Lista" 
+                         action="#{inicioBean.listaOrcamento}"
+                         icon="fa fa-file-text"
+                         style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;"/>
+                      <p:menuitem value="Novo Orçamento" 
+                         rendered="#{autenticacaoBean.userLogin.perfil=='ADMINISTRADOR'||autenticacaoBean.userLogin.perfil=='PADRAO'}"
+                         action="#{inicioBean.novoOrcamento}"
+                         icon="fa fa-file-text"
+                         style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;"/>
+                    </p:submenu>
+
+                </p:panelMenu>
+
+            </h:form>
+
+        </p:layoutUnit>
+
+        <p:layoutUnit position="east" size="300" header="Aniversariantes"
+            style="text-align:center;" resizable="false" closable="false "
+            collapsible="true" effect="drop">
+            <h:form>
+               <p:dataList styleClass="aniversariantesDataList" value="#{clienteBean.aniversariantes}" var="clientes" itemType="none" 
+               paginator="true" rows="10" type="unordered" 
+               emptyMessage="Nenhum aniversariante na data">
+               <f:facet name="header">
+               Clientes Aniversariantes
+              </f:facet>
+               <div class="ui-grid-col-3"><i class="fa fa-fw fa-birthday-cake" style="color: #ff0000"></i></div>
+              #{clientes.nome}
+              <br/>
+              <div class="ui-grid-col-3"><i class="fa fa-fw fa-whatsapp" style="color: #00e600"></i></div>
+              #{clientes.whatsapp}
+               <hr/>
+             </p:dataList>
+             <hr/>
+             
+            </h:form>
+            
+        </p:layoutUnit>
+
+        <p:layoutUnit position="center" resizable="false" closable="false"
+            collapsible="false">
+            <ui:insert name="conteudo" />
+            <h:panelGrid>
+               <div style="height:3 px">
+        <h:form>
+        <p:growl id="msgs" showDetail="true" />
+         <h:form>
+           <h:panelGrid columns="3" >           
+            <p:panel id="finance" header="Clientes Cadastrados" styleClass="totalCliente"
+              style="width:280px;height:110px;color:#ffffff; background:#80e5ff "   >
+                 
+                 <p:outputLabel value="Clientes" style=" position:absolute;
+                 top:59px;
+                 left: 22px; font-size:28px ; font-weight:bold ;color:#ffffff "/>
+                 <p:outputLabel value=" #{clienteBean.totalG}" 
+                style="top:-10px ; position: relative;left:82px; font-size:50px ; font-weight:bold ;color:#ffffff " />
+                <div class="ui-grid-col-1"><h1><i class="fa fa-wechat" style="color:#ffffff;"></i></h1></div>
+             </p:panel>
+ 
+            <p:panel id="lifestyle" header="Orçamentos Gerados" styleClass="totalOrcamentos" 
+            style="width:280px;height:110px;color:#ffffff; background:#00ff55; left:350px"  >
+                 <p:outputLabel value="Orçamentos" style=" position:absolute;
+                 top:59px;
+                 left: 332px; font-size:28px ; font-weight:bold ;color:#ffffff "/>
+                 <p:outputLabel value=" #{orcamentoBean.totalG}" 
+                style="top:-10px ; position: relative;left: 135px; font-size:50px ; font-weight:bold ;color:#ffffff " />
+                <div class="ui-grid-col-1"><h1><i class="fa fa-smile-o" style="color:#ffffff;"></i></h1></div>
+            </p:panel>
+            
+            <p:panel id="prod" header="Produtos/Serviços" styleClass="totalOrcamentos" 
+            style="width:280px;height:110px;color:#ffffff; background:#ff3333; left:350px"  >
+                 <p:outputLabel value="Produtos" style=" position:absolute;
+                 top:59px;
+                 left: 646px; font-size:28px ; font-weight:bold ;color:#ffffff "/>
+                 <p:outputLabel value=" #{produtoBean.totalG}" 
+                style="top:-10px ; position: relative;left: 95px; font-size:50px ; font-weight:bold ;color:#ffffff " />
+                <div class="ui-grid-col-1"><h1><i class="fa fa-cloud-download" style="color:#ffffff;"></i></h1></div>
+            </p:panel>
+            </h:panelGrid>
+            
+          <hr/> 
+         
+         <p:panel id="sports" header="Mais usados nos orçamentos" styleClass="ocupada" style="width:550px;height:340px;
+         background:#ffff1a;" >
+          <p:chart type="pie" model="#{orcamentoBean.pizza}" style="width:500px;height:300px" 
+               />
+            </p:panel> 
+           
+        
+        </h:form>
+        <div style="clear:both" />
+    </h:form>
+</div>
+            </h:panelGrid>
+
+        </p:layoutUnit>
+    </p:layout>
+ </h:body> 
+</html>

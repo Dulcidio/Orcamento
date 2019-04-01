@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fp="http://xmlns.jcp.org/jsf/core"
+       >
+     <h:head>
+      <h:outputStylesheet library="css" name="style.css"/>
+      
+       <style type="text/css">
+        .servico {
+        background-color:  #75a3a3 !important;
+        background-image: none !important;
+        color: #ffffff !important;
+           }
+      </style>
+       <style type="text/css">
+        .produto {
+        background-color:  #ffffff !important;
+        background-image: none !important;
+        color: #000000 !important;
+           }
+      </style>
+      
+       <style>
+       hr { 
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1px;
+   
+} 
+</style>
+
+<script>
+      function somenteNumeros(num) {
+        var er = /[^0-9.]/;
+        er.lastIndex = 0;
+        var campo = num;
+        if (er.test(campo.value)) {
+          campo.value = "";
+        }
+      }
+     </script>
+      
+     <title>Lista de Produtos e Categoria</title> 
+       </h:head>  
+      
+      
+    <h:body>
+     
+    
+    
+     <p:growl id="mensagem"/>
+     <p:layout fullPage="true">
+
+    <p:layoutUnit position="north" size="50" header="Lista de Produtos/Serviços e Categorias" resizable="true" closable="true" collapsible="true">
+       
+    </p:layoutUnit>
+
+    <p:layoutUnit position="south" size="240" header="Categorias cadastradas no sistema" resizable="true" closable="true" collapsible="true">
+          <h:form id="formCatProdutos">
+         <p:dataTable  id="tabCategoriaProduto" var="categorias" value="#{categoriaProdutoBean.categorias}"  rows="14"
+                 editable="true" 
+                 rendered="true"
+                 scrollable="true" scrollHeight="180"
+                 emptyMessage="nenhuma categoria registrada" >
+               
+        <p:column headerText="Id" width="10%">
+            <h:outputText value="#{categorias.codigo}" />
+        </p:column>
+ 
+        <p:column headerText="Descricão">
+            <h:outputText value="#{categorias.descricao}" />
+        </p:column>
+ 
+        <p:column headerText="Observação">
+            <h:outputText value="#{categorias.observacao}" />
+        </p:column>
+        
+        <p:column headerText="Ação" width="8%">
+          <p:commandButton icon="fa fa-fw fa-edit" title="editar" 
+           actionListener="#{categoriaProdutoBean.editar}"
+           oncomplete="PF('cadastroCategoriaProdutoDL').show()"
+           update="formCategoriaProdutoDL"
+            style="color:#ffffff; background:#00e600"
+            rendered="#{autenticacaoBean.userLogin.perfil=='ADMINISTRADOR'||autenticacaoBean.userLogin.perfil=='PADRAO'}" >
+            <f:attribute  name="categoriaProdutoSelecionado" value="#{categorias}"/>
+            <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/> 
+           </p:commandButton>
+           
+        </p:column>
+        </p:dataTable>
+         
+      </h:form>
+    </p:layoutUnit>
+
+    <p:layoutUnit position="west" size="220" header="Menu Inicial" resizable="true" closable="true" collapsible="true">
+        <h:form>
+
+                <p:panelMenu
+                     >
+                    <p:submenu label="Opções" style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;">
+                        <p:menuitem value="Página Principal" 
+                        icon="fa fa-home"
+                         action="#{usuarioBean.inicialPage}"
+                         
+                          style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;" />
+                         
+                    </p:submenu>
+                     <p:submenu label="Produtos/Serviços" action="#{usuarioBean.inicialPage}"
+                          style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;">
+                        <p:menuitem value="Novo Produto/Serviço" oncomplete="PF('cadastroProdutoDL').show()"
+                        rendered="#{autenticacaoBean.userLogin.perfil=='ADMINISTRADOR'||autenticacaoBean.userLogin.perfil=='PADRAO'}"
+                        action="#{produtoBean.limpar}"
+                        update=":formProdutoDL:grid1 :formProdutoDL:grid2 :formProdutoDL:grid3 :formProdutoDL:grid4 
+                        :formProdutoDL:grid5 :formCatProdutos:tabCategoriaProduto "
+                        icon="fa fa-plus-square-o"
+                          style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;">
+                        <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+                        </p:menuitem>
+                        <p:menuitem icon="fa fa-print" value="Relatório de Produtos/Serviços"
+                         action="#{produtoBean.imprimir}"
+                         style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;"
+                         ajax="false"
+                         target="_blank"/>
+                    </p:submenu>
+                    <p:submenu label="Categoria" action="#{usuarioBean.inicialPage}"
+                          style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;">
+                        <p:menuitem value="Nova Categoria" oncomplete="PF('cadastroCategoriaProdutoDL').show()"
+                        rendered="#{autenticacaoBean.userLogin.perfil=='ADMINISTRADOR'||autenticacaoBean.userLogin.perfil=='PADRAO'}"
+                        actionListener="#{categoriaProdutoBean.limpar}"
+                        update=":formCategoriaProdutoDL :formCategoriaProdutoDL:gridCat1 :formCategoriaProdutoDL:gridCat2"
+                        icon="fa fa-plus-square-o"
+                          style="font-size:14px ;
+                         font-weight:bold ; font-style: italic;">
+                        <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+                        </p:menuitem>
+                    </p:submenu>
+                  </p:panelMenu>
+             </h:form>
+    </p:layoutUnit>
+ 
+
+    <p:layoutUnit position="center">
+    <h:form>
+    <p:dataTable  id="tabProdutos" var="produtos" value="#{produtoBean.produtos}"  rows="14"
+                 
+                 paginatorPosition="header"
+                 editable="true" 
+                 rowStyleClass="#{produtos.tipo eq  'Produto' ? 'produto' : null || produtos.tipo eq  'Servico' ? 'servico' : null }" 
+                 rendered="true"
+                 emptyMessage="nenhum produto ou serviço listado">
+        <f:facet name="header">
+             <p:row style="background-color:#000000;" >
+             <p:column colspan="7" > Tabela de Produtos/Servios </p:column>
+            </p:row>
+        </f:facet>      
+        <p:column width="4%">
+         <p:rowToggler />
+         </p:column>
+           <p:rowExpansion id="detalhesProdutos" reflow="true" >
+             <p:panelGrid id="gridDetalhes"  styleClass="semBorda" columns="1"  >
+              <f:facet name="header">
+                 <p:row>
+                  <p:column colspan="7">Detalhes Produtos/Serviços</p:column>
+                 </p:row>
+              </f:facet>  
+              <p:tabView reflow="true" style="color: #ff6600;" >
+                <p:tab title="Valores"  >
+                  <h:panelGrid columns="1" cellpadding="1">
+                    <f:facet  name="header">
+                  <p:row >
+                     <p:column colspan="7" >Informações valores produtos/serviços</p:column>
+                  
+                   </p:row>
+                 </f:facet>
+                       <p:column >
+                        <h:outputText value="Preço a vista: #{produtos.precoVista}" style="font-weight:bold" >
+                        <f:convertNumber locale="pt_BR" minFractionDigits="2"/>
+                        </h:outputText>
+                         </p:column>
+                        <h:outputText value="Minimo: #{produtos.minimo}"  style="font-weight:bold"  />
+                         
+                  </h:panelGrid>
+                </p:tab> 
+                <p:tab title="Detalhes"  >
+                  <h:panelGrid columns="1" cellpadding="1">
+                    <f:facet  name="header">
+                  <p:row >
+                     <p:column colspan="7" >Informações produtos/serviços</p:column>
+                  </p:row>
+                 </f:facet>
+                        <p:column >
+                        <h:outputText value="Validade: " style="font-weight:bold"/>
+                        <h:outputText value="#{produtos.validade}"  style="font-weight:bold" >
+                        <f:convertDateTime locale="pt_BR"/>
+                        </h:outputText>
+                        </p:column>
+                        <h:outputText value="Referência: #{produtos.referencia}"  style="font-weight:bold" />
+                        <h:outputText value="Obs: #{produtos.observacoes}" style="font-weight:bold" />
+                  </h:panelGrid>
+                </p:tab> 
+              </p:tabView>
+              </p:panelGrid>
+           </p:rowExpansion> 
+         
+            
+        <p:column headerText="Id"  width="5%">
+            <h:outputText value="#{produtos.codigo}" />
+        </p:column>
+ 
+        <p:column headerText="Descricão" width="25%"  filterBy="#{produtos.descricao}" filterMatchMode="contains">
+            <h:outputText value="#{produtos.descricao}" />
+        </p:column>
+          <p:column headerText="Qtd" width="8%">
+            <h:outputText value="#{produtos.quantidade}" />
+        </p:column>
+         <p:column headerText="Tipo" width="10%" filterBy="#{produtos.tipo}">
+            <h:outputText value="#{produtos.tipo}" />
+        </p:column>
+        <p:column headerText="Preço" width="10%" >
+            <h:outputText value="#{produtos.precoVista}">
+            <f:convertNumber locale="pt_BR" minFractionDigits="2"/>
+            </h:outputText>
+        </p:column>
+        <p:column headerText="Uni" width="10%">
+            <h:outputText value="#{produtos.unidade.tipoUnidade}" />
+        </p:column>
+        <p:column headerText="Ref" width="15%" filterBy="#{produtos.referencia}" filterMatchMode="contains">
+            <h:outputText value="#{produtos.referencia}" />
+        </p:column>
+        
+        <p:column headerText="Categoria" width="12%" >
+            <h:outputText value="#{produtos.categoria.descricao}" />
+        </p:column>
+        <p:column headerText="Ação" width="10%">
+          <p:commandButton icon="fa fa-fw fa-edit" title="editar" 
+           actionListener="#{produtoBean.editar}"
+           oncomplete="PF('alterarProdutoDL').show()"
+           update=":formAlterarProdutoDL:altgrid2 :formAlterarProdutoDL:altgrid3 :formAlterarProdutoDL:altgrid4 :formAlterarProdutoDL:altgrid5"  
+            style="color:#ffffff; background:#00e600" 
+            rendered="#{autenticacaoBean.userLogin.perfil=='ADMINISTRADOR'||autenticacaoBean.userLogin.perfil=='PADRAO'}">
+            <f:attribute  name="produtoSelecionado" value="#{produtos}"/>
+             <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+           </p:commandButton>
+            
+           
+        </p:column>
+      </p:dataTable>
+    <hr></hr>
+    </h:form>
+    </p:layoutUnit>
+ </p:layout>
+ 
+   <p:dialog header="Formulário de Produtos" closable="true" draggable="false"
+      modal="true" visible="false" widgetVar="cadastroProdutoDL">
+       <h:form id="formProdutoDL">
+          <h:panelGrid id="grid1" columns="1" cellpadding="2" >
+           <p:outputLabel value="Escolha o tipo do cadastro: "></p:outputLabel>
+           <p:selectOneRadio id="basic" value="#{produtoBean.produto.tipo}" valueChangeListener="#{produtoBean.changeRadio}"
+              required="true"
+              requiredMessage="O tipo produto ou serviço é Obrigatório" rendered="true" >
+               <f:selectItems value="#{produtoBean.lista}" var="item" itemValue="#{item}" itemLabel="#{item}"  />
+               <f:ajax render="Unidade buttonAdmissao qtd min" ></f:ajax>
+           </p:selectOneRadio>
+           
+          </h:panelGrid>
+          <hr></hr>
+           <br></br>
+          <h:panelGrid id="grid2" columns="10" cellpadding="2">
+          <p:outputLabel for="desc" value="Descrição: " />
+           <p:inputText id="desc" value="#{produtoBean.produto.descricao}" required="true"
+            size="35" placeholder="Descrição" requiredMessage="Descrição é obrigatório"/> 
+            <p:spacer width="10" height="10" />
+            <p:outputLabel  value="Referência: " />
+            <p:inputText id="Referência" value="#{produtoBean.produto.referencia}" required="true"
+            size="10" placeholder="" />
+            
+              
+            </h:panelGrid>
+            <br/>
+             <h:panelGrid id="grid3" columns="11" cellpadding="2">
+               <p:outputLabel for="avista" value="Preço: " />
+               <p:spacer width="30" height="30" />
+               <p:inputText mask=" "  id="avista" value="#{produtoBean.produto.precoVista}" required="true"
+               size="10" placeholder="9,99" requiredMessage="O valor é obrigatório"
+               maxlength="8"
+               validatorMessage="Informe um valor entre 0.01 e 99999.99 para o campo preço">
+               <f:validateDoubleRange minimum="0.01" maximum="99999.99"></f:validateDoubleRange>
+               <f:convertNumber locale="pt_BR" minFractionDigits="2"></f:convertNumber>
+               </p:inputText> 
+               <p:spacer width="10" height="10" />
+              <p:outputLabel value="Unidade: "  />
+			  <p:selectOneMenu id="Unidade" value="#{produtoBean.produto.unidade}" style="width:20px" 
+			  required="true" requiredMessage="O campo 'unidade' é obrigatório" disabled="#{produtoBean.tipoReg !='Produto'}"
+			  >
+			  <f:selectItem noSelectionOption="true" itemValue="" itemLabel="Selecionar Escolha"/>
+			  <f:selectItems value="#{produtoBean.unidade}" 
+			  var="unidade"
+			  itemValue="#{unidade}"
+			  itemLabel="#{unidade.tipoUnidade}"/>
+              </p:selectOneMenu>
+            
+             </h:panelGrid>
+             <br/>
+            <h:panelGrid id="grid4" columns="11" cellpadding="2">
+            <p:outputLabel for="qtd" value="Qtd: " />
+             <p:spacer width="44" height="44" />
+            <p:inputText   id="qtd" value="#{produtoBean.produto.quantidade}" required="true"
+            disabled="#{produtoBean.tipoReg !='Produto'}" onkeyup="somenteNumeros(this);"
+            size="10" placeholder="qtd" requiredMessage="A quantidade obrigatória"
+            validatorMessage="Informe um valor entre 0 e 100000 para a quantidade">
+            <f:validateLongRange minimum="0" maximum="100000" ></f:validateLongRange>
+            </p:inputText>
+            <p:spacer width="10" height="10" />
+            <p:outputLabel   value="Validade: " />
+            <p:spacer width="10" height="10" />
+            <p:calendar id="buttonAdmissao" value="#{produtoBean.produto.validade}" showOn="button"  disabled="#{produtoBean.tipoReg != 'Produto'}"/>
+            <p:spacer width="10" height="10" />
+            <p:outputLabel for="min" value="Minimo: " />
+            <p:spacer width="10" height="10" />
+            <p:inputText   id="min" value="#{produtoBean.produto.minimo}" required="true"
+            disabled="#{produtoBean.tipoReg !='Produto'}" onkeyup="somenteNumeros(this);"
+            size="10" placeholder="min" requiredMessage="A quantidade Minima é obrigatória"
+            validatorMessage="Informe um valor entre 0 e 1000"> 
+            <f:validateLongRange minimum="0" maximum="1000" ></f:validateLongRange>
+            </p:inputText>  
+            </h:panelGrid>
+             <br/>
+            <h:panelGrid id="grid5" columns="11" cellpadding="2">
+            <p:outputLabel  value="Categoria: " />
+            <p:spacer width="15" height="15" />
+            <p:selectOneMenu value="#{produtoBean.produto.categoria}" style="width:125px"
+								converter="omnifaces.SelectItemsConverter"
+								required="true" requiredMessage="O campo 'Categoria' é obrigatório" >
+								<f:selectItem noSelectionOption="true" itemValue="#{categoriaProdutoBean.categoria}" 
+								itemLabel="#{produtoBean.categoria.descricao}"/>
+								<f:selectItems value="#{categoriaProdutoBean.categorias}" var="cat" 
+								itemValue="#{cat}" itemLabel="#{cat.descricao}"
+								/>
+              </p:selectOneMenu>
+            <p:spacer width="7" height="7" />
+            <p:outputLabel  value="Observações: " />
+            <p:inputText id="obs" value="#{produtoBean.produto.observacoes}"  
+            size="53" placeholder="Observações" /> 
+            
+            </h:panelGrid>
+             <hr></hr>
+          
+         <br/>
+         
+         <h:panelGrid columns="2">	
+         		 
+        <p:commandButton value="Salvar"  
+         actionListener="#{produtoBean.salvar}"
+         update="mensagem :tabProdutos"  
+        style="margin-right:5px;"
+        ajax="false"
+          />
+        <p:commandButton value="Sair" 
+	    style="margin-right:5px;"
+	    update=":formProdutoDL:grid1 :formProdutoDL:grid2 :formProdutoDL:grid3 :formProdutoDL:grid4 :formProdutoDL:grid5" 
+        onclick="PF('cadastroProdutoDL').hide()"
+        actionListener="#{produtoBean.limpar}">	
+        <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+        </p:commandButton>	
+       																
+        </h:panelGrid>
+        </h:form>
+     </p:dialog>
+     
+      <p:dialog header="Formulário Categoria Produtos" closable="true" draggable="false"
+      modal="true" visible="false" widgetVar="cadastroCategoriaProdutoDL">
+         <h:form id="formCategoriaProdutoDL">
+          <h:panelGrid id="gridCat1" columns="5">
+          <p:outputLabel for="catDesc" value="Descrição: " />
+          <p:spacer width="2" height="2" />
+            <p:inputText id="catDesc" value="#{categoriaProdutoBean.categoria.descricao}" required="true"
+            size="35" placeholder="Descrição" requiredMessage="Descrição é obrigatório"/> 
+            </h:panelGrid>
+            <br/>
+            <h:panelGrid id="gridCat2" columns="7">
+            <p:outputLabel  value="Observação: " />
+            <p:spacer width="8" height="8" />
+            <p:inputText id="obs" value="#{categoriaProdutoBean.categoria.observacao}" 
+            size="35" placeholder="Observações" /> 
+             
+            </h:panelGrid>
+           
+          
+         <h:panelGrid columns="2">	
+         <h:form>				
+        <p:commandButton value="Salvar"  
+         actionListener="#{categoriaProdutoBean.salvar}"
+         update="mensagem ormCatProdutos:tabCategoriaProduto 
+         :formProdutoDL:grid1 :formProdutoDL:grid2 :formProdutoDL:grid3 :formProdutoDL:grid4 :formProdutoDL:grid5"  
+         style="margin-right:5px;"
+         ajax="false"
+          >
+          <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+         </p:commandButton>
+        <p:commandButton value="Sair" 
+          actionListener="#{categoriaProdutoBean.limpar}"
+	      style="margin-right:5px;"
+	      update=":formCategoriaProdutoDL :formCategoriaProdutoDL:gridCat1 :formCategoriaProdutoDL:gridCat2"
+	      onclick="PF('cadastroCategoriaProdutoDL').hide()"
+		      
+           >
+         <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+        </p:commandButton>   
+         </h:form>																				
+        </h:panelGrid>
+      </h:form>
+     </p:dialog>
+     
+     
+     <p:dialog header="Alterar Produtos/Serviços" closable="true" draggable="false"
+      modal="true" visible="false" widgetVar="alterarProdutoDL">
+       <h:form id="formAlterarProdutoDL">
+          <hr></hr>
+           <br></br>
+          <h:panelGrid id="altgrid2" columns="10" cellpadding="2">
+          <p:outputLabel for="desc" value="Descrição: " />
+           <p:inputText id="desc" value="#{produtoBean.produto.descricao}" required="true"
+            size="35" placeholder="Descrição" requiredMessage="Descrição é obrigatório"/> 
+            <p:spacer width="10" height="10" />
+            <p:outputLabel  value="Referência: " />
+            <p:inputText id="Referência" value="#{produtoBean.produto.referencia}" required="true"
+            size="10" placeholder="" />
+            
+              
+            </h:panelGrid>
+            <br/>
+             <h:panelGrid id="altgrid3" columns="11" cellpadding="2">
+               <p:outputLabel for="avista" value="Preço: " />
+               <p:spacer width="30" height="30" />
+               <p:inputText mask=" "  id="avista" value="#{produtoBean.produto.precoVista}" required="true"
+               size="10" placeholder="9,99" requiredMessage="O valor é obrigatório"
+               maxlength="8"
+               validatorMessage="Informe um valor entre 0.01 e 99999.99 para o campo preço">
+               <f:validateDoubleRange minimum="0.01" maximum="99999.99"></f:validateDoubleRange>
+               <f:convertNumber locale="pt_BR" minFractionDigits="2"></f:convertNumber>
+               </p:inputText> 
+               <p:spacer width="10" height="10" />
+              <p:outputLabel value="Unidade: "  />
+			  <p:selectOneMenu id="Unidade" value="#{produtoBean.produto.unidade}" style="width:20px" 
+			   
+			  >
+			  <f:selectItem noSelectionOption="true" itemValue="" itemLabel="Selecionar Escolha"/>
+			  <f:selectItems value="#{produtoBean.unidade}" 
+			  var="unidade"
+			  itemValue="#{unidade}"
+			  itemLabel="#{unidade.tipoUnidade}"/>
+              </p:selectOneMenu>
+            
+             </h:panelGrid>
+             <br/>
+            <h:panelGrid id="altgrid4" columns="11" cellpadding="2">
+            <p:outputLabel for="qtd" value="Qtd: " />
+             <p:spacer width="67" height="44" />
+            <p:inputText   id="qtd" value="#{produtoBean.produto.quantidade}" 
+              onkeyup="somenteNumeros(this);"
+            size="10" placeholder="qtd"  
+            validatorMessage="Informe um valor entre 0 e 100000 para a quantidade">
+            <f:validateLongRange minimum="0" maximum="100000" ></f:validateLongRange>
+            </p:inputText>
+            <p:spacer width="10" height="10" />
+            <p:outputLabel   value="Validade: " />
+            <p:spacer width="10" height="10" />
+            <p:calendar id="buttonAdmissao" value="#{produtoBean.produto.validade}" showOn="button" />
+            <p:spacer width="10" height="10" />
+            <p:outputLabel for="min" value="Minimo: " />
+            <p:spacer width="10" height="10" />
+            <p:inputText   id="min" value="#{produtoBean.produto.minimo}" 
+             onkeyup="somenteNumeros(this);"
+            size="10" placeholder="min"  
+            validatorMessage="Informe um valor entre 0 e 1000"> 
+            <f:validateLongRange minimum="0" maximum="1000" ></f:validateLongRange>
+            </p:inputText>  
+            </h:panelGrid>
+             <br/>
+            <h:panelGrid id="altgrid5" columns="11" cellpadding="2">
+            <p:outputLabel  value="Categoria: " />
+            <p:spacer width="15" height="15" />
+            <p:selectOneMenu value="#{produtoBean.produto.categoria}" style="width:125px"
+								converter="omnifaces.SelectItemsConverter"
+								required="true" requiredMessage="O campo 'Categoria' é obrigatório" >
+								<f:selectItem noSelectionOption="true" itemValue="#{categoriaProdutoBean.categoria}" 
+								itemLabel="#{produtoBean.produto.categoria.descricao}"/>
+								<f:selectItems value="#{categoriaProdutoBean.categorias}" var="cat" 
+								itemValue="#{cat}" itemLabel="#{cat.descricao}"
+								/>
+              </p:selectOneMenu>
+            <p:spacer width="7" height="7" />
+            <p:outputLabel  value="Observações: " />
+            <p:inputText id="obs" value="#{produtoBean.produto.observacoes}"  
+            size="53" placeholder="Observações" /> 
+            
+            </h:panelGrid>
+             <hr></hr>
+          
+         <br/>
+         
+         <h:panelGrid columns="2">	
+         		 
+        <p:commandButton value="Salvar"  
+         actionListener="#{produtoBean.salvar}"
+         update="mensagem :tabProdutos"  
+        style="margin-right:5px;"
+        ajax="false"
+          />
+        <p:commandButton value="Sair" 
+	    style="margin-right:5px;"
+	    update=" :formAlterarProdutoDL:altgrid2 :formAlterarProdutoDL:altgrid3 
+	    :formAlterarProdutoDL:altgrid4 :formAlterarProdutoDL:altgrid5" 
+        onclick="PF('alterarProdutoDL').hide()"
+        actionListener="#{produtoBean.limpar}">	
+        <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+        </p:commandButton>	
+       																
+        </h:panelGrid>
+        </h:form>
+     </p:dialog>
+     
+     
+ </h:body> 
+</html>
