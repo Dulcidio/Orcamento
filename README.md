@@ -1,5 +1,5 @@
 # Orçamentos
-Java Web, JSF, Hibernate, Postgres. Maven, Tomcat
+Java Web, JSF, Primefaces, Hibernate, Postgres. Maven, Tomcat
 
 # Objetivo
 <p>Sistema para gestão de orçamentos de forma simplificada.</p>
