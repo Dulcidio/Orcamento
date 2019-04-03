@@ -49,4 +49,4 @@ Nome Fantasia, Razão Social, CPF ou CNPJ,Telefone, Celular, e-mail, Rua / Nro, 
 Inscrição Estadual</p>
 <p><b>Geração de Orçamentos:</b></br>
 <b>O registro de orçamentos permite adicionar:</b> Cliente, Funcionário, Produtos, Serviços, Desconto, Observações,
-Situação (Dois tipos possíveis de situação: OK e Cancelado).
+Situação (Dois tipos possíveis de situação: OK e Cancelado).</p>
